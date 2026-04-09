@@ -353,7 +353,31 @@ tr:hover td{background:var(--surface2)}
 .del-btn{background:none;border:none;color:var(--text2);cursor:pointer;padding:5px 7px;border-radius:6px;transition:all .2s;font-size:14px}
 .del-btn:hover{background:rgba(255,95,126,.1);color:var(--red)}
 
-/* ── RESPONSIVE ── */
+/* ── EXCHANGE BTNS ── */
+.exc-btn{display:flex;flex-direction:column;align-items:center;gap:3px;padding:8px 4px;border-radius:8px;background:var(--surface);border:1.5px solid var(--border);cursor:pointer;transition:all .2s;font-size:10px;font-weight:700;color:var(--text2);text-align:center}
+.exc-btn img{width:20px;height:20px;border-radius:4px;object-fit:contain}
+.exc-btn:hover,.exc-btn.on{border-color:var(--accent);background:rgba(124,111,239,.12);color:var(--accent)}
+.add-exc{border-style:dashed;color:var(--accent)}
+
+/* ── NOTE CARD ── */
+.note-card{background:var(--surface2);border:1px solid var(--border);border-radius:var(--r2);padding:16px;cursor:pointer;transition:all .2s;position:relative}
+.note-card:hover{border-color:var(--accent);transform:translateY(-2px)}
+.note-title{font-size:14px;font-weight:700;margin-bottom:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.note-folder{display:inline-block;font-size:10px;font-weight:700;padding:2px 8px;border-radius:4px;background:rgba(124,111,239,.12);color:var(--accent);margin-bottom:8px}
+.note-preview{font-size:12px;color:var(--text2);line-height:1.5;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-overflow:hidden;overflow:hidden}
+.note-date{font-size:10px;color:var(--text2);margin-top:8px}
+.note-del{position:absolute;top:10px;right:10px;background:none;border:none;color:var(--text2);cursor:pointer;font-size:13px;padding:3px 6px;border-radius:5px}
+.note-del:hover{background:rgba(255,95,126,.1);color:var(--red)}
+
+/* ── REVIEW CARD ── */
+.rv-card{background:var(--surface2);border:1px solid var(--border);border-radius:var(--r2);padding:14px;margin-bottom:10px}
+.rv-stars{font-size:16px;margin-bottom:4px}
+.rv-text{font-size:13px;margin-bottom:6px;line-height:1.5}
+.rv-meta{font-size:11px;color:var(--text2)}
+
+/* ── DASH CUR SECTION ── */
+.cur-section{display:none}
+.cur-section.on{display:block}
 @media(max-width:900px){
   .grid-4{grid-template-columns:repeat(2,1fr)}
   .grid-3{grid-template-columns:repeat(2,1fr)}
@@ -394,8 +418,7 @@ tr:hover td{background:var(--surface2)}
   </div>
   <div class="auth-card">
     <div class="auth-logo">
-      <img class="auth-logo-img" src="logo.jpg" alt="SN's Ledger" onerror="this.style.display='none';this.nextElementSibling.style.display='block'">
-      <div style="display:none;width:72px;height:72px;background:linear-gradient(135deg,#7c6fef,#00e5b0);border-radius:18px;margin:0 auto 10px;display:flex;align-items:center;justify-content:center;font-size:30px">📒</div>
+      <img class="auth-logo-img" src="logo.jpg" alt="SN's Ledger">
       <h1>SN's Ledger</h1>
       <p>Your Personal Finance & Crypto Hub</p>
     </div>
@@ -414,7 +437,7 @@ tr:hover td{background:var(--surface2)}
       <div class="f-group"><label class="f-label">Password</label><input class="f-input" type="password" id="sPass" placeholder="min 6 characters" autocomplete="new-password"></div>
       <button class="btn-auth" onclick="signup()">Create Account →</button>
     </div>
-    <p class="auth-note">🔒 Each user has their own private space<br>You can share this app with 2–3 people</p>
+    <p class="auth-note">© 2026 SN's Ledger · All rights reserved</p>
   </div>
 </div>
 
@@ -475,6 +498,12 @@ tr:hover td{background:var(--surface2)}
       <div class="nav" onclick="nav('tools')"><div class="nav-ic">🛠</div>Trading Tools</div>
       <div class="nav" onclick="nav('converter')"><div class="nav-ic">🔄</div>Converter</div>
     </div>
+    <div class="sb-section">
+      <div class="sb-label">More</div>
+      <div class="nav" onclick="nav('notes')"><div class="nav-ic">📝</div>My Notes</div>
+      <div class="nav" onclick="nav('profile')"><div class="nav-ic">👤</div>Profile</div>
+      <div class="nav" onclick="nav('review')"><div class="nav-ic">⭐</div>Rate App</div>
+    </div>
     <div class="sb-bottom">
       <button class="ic-btn" onclick="toggleTheme()" title="Theme">🌙</button>
       <button class="ic-btn" onclick="exportXLSX()" title="Export">📤</button>
@@ -495,6 +524,14 @@ tr:hover td{background:var(--surface2)}
         </div>
       </div>
       <div class="ticker-wrap"><div class="ticker-inner" id="ticker">Loading...</div></div>
+      <!-- Currency tabs -->
+      <div style="display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap" id="dashCurTabs">
+        <button class="ct-btn on" onclick="dashTab('all',this)">All</button>
+        <button class="ct-btn" onclick="dashTab('USD',this)">💵 USD</button>
+        <button class="ct-btn" onclick="dashTab('EUR',this)">💶 EUR</button>
+        <button class="ct-btn" onclick="dashTab('BDT',this)">💴 BDT</button>
+        <button class="ct-btn" onclick="dashTab('CRYPTO',this)">🪙 Crypto</button>
+      </div>
       <div class="grid-4" id="dashKpis">
         <div class="kpi"><div class="kpi-bar" style="background:linear-gradient(90deg,var(--blue),var(--accent))"></div><div class="kpi-label">Total Balance</div><div class="kpi-val b" id="d-bal">$0.00</div><div class="kpi-sub">All accounts</div></div>
         <div class="kpi"><div class="kpi-bar" style="background:linear-gradient(90deg,var(--red),#c0392b)"></div><div class="kpi-label">Monthly Expense</div><div class="kpi-val r" id="d-exp">$0.00</div><div class="kpi-sub">This month</div></div>
@@ -667,6 +704,58 @@ tr:hover td{background:var(--surface2)}
       </div>
     </div>
 
+    <!-- NOTES -->
+    <div class="page" id="pg-notes">
+      <div class="topbar"><div class="topbar-title">📝 My <span>Notes</span></div><button class="btn primary sm" onclick="openM('noteModal')">＋ New Note</button></div>
+      <div id="noteFolders" style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px"></div>
+      <div id="notesList" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:12px"><div class="spin-wrap"><div class="spin"></div></div></div>
+    </div>
+
+    <!-- PROFILE -->
+    <div class="page" id="pg-profile">
+      <div class="topbar"><div class="topbar-title">👤 My <span>Profile</span></div></div>
+      <div class="sec" style="max-width:480px">
+        <div style="display:flex;align-items:center;gap:16px;margin-bottom:24px;padding-bottom:20px;border-bottom:1px solid var(--border)">
+          <div style="width:64px;height:64px;background:linear-gradient(135deg,var(--accent),var(--accent2));border-radius:18px;display:flex;align-items:center;justify-content:center;font-size:28px;font-weight:800;color:#fff" id="profileAvatar">S</div>
+          <div><div style="font-size:18px;font-weight:800" id="profileName">—</div><div style="font-size:13px;color:var(--text2)" id="profileEmail">—</div></div>
+        </div>
+        <div class="f-group"><label class="f-label">Display Name</label><input class="f-input" type="text" id="pf-name" placeholder="Your name"></div>
+        <button class="btn primary" style="width:100%;justify-content:center;margin-bottom:16px" onclick="updateName()">💾 Update Name</button>
+        <div style="border-top:1px solid var(--border);padding-top:16px;margin-top:4px">
+          <div style="font-size:13px;font-weight:700;margin-bottom:12px;color:var(--text2)">CHANGE PASSWORD</div>
+          <div class="f-group"><label class="f-label">New Password</label><input class="f-input" type="password" id="pf-pass" placeholder="min 6 characters"></div>
+          <div class="f-group"><label class="f-label">Confirm Password</label><input class="f-input" type="password" id="pf-pass2" placeholder="confirm password"></div>
+          <button class="btn" style="width:100%;justify-content:center" onclick="updatePass()">🔒 Change Password</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- REVIEW -->
+    <div class="page" id="pg-review">
+      <div class="topbar"><div class="topbar-title">⭐ Rate <span>App</span></div></div>
+      <div class="sec" style="max-width:500px">
+        <div style="text-align:center;margin-bottom:24px">
+          <div style="font-size:48px;margin-bottom:8px">📒</div>
+          <div style="font-size:18px;font-weight:800">How's SN's Ledger?</div>
+          <div style="font-size:13px;color:var(--text2);margin-top:4px">Your feedback helps improve the app</div>
+        </div>
+        <div style="display:flex;justify-content:center;gap:12px;margin-bottom:20px" id="starRow">
+          <span style="font-size:36px;cursor:pointer;transition:transform .2s" onclick="setStars(1)" onmouseover="hoverStars(1)" onmouseout="renderStars()">⭐</span>
+          <span style="font-size:36px;cursor:pointer;transition:transform .2s" onclick="setStars(2)" onmouseover="hoverStars(2)" onmouseout="renderStars()">⭐</span>
+          <span style="font-size:36px;cursor:pointer;transition:transform .2s" onclick="setStars(3)" onmouseover="hoverStars(3)" onmouseout="renderStars()">⭐</span>
+          <span style="font-size:36px;cursor:pointer;transition:transform .2s" onclick="setStars(4)" onmouseover="hoverStars(4)" onmouseout="renderStars()">⭐</span>
+          <span style="font-size:36px;cursor:pointer;transition:transform .2s" onclick="setStars(5)" onmouseover="hoverStars(5)" onmouseout="renderStars()">⭐</span>
+        </div>
+        <div class="f-group"><label class="f-label">Your Review</label><textarea class="f-input f-textarea" id="rv-text" placeholder="Tell us what you think..."></textarea></div>
+        <div class="f-group"><label class="f-label">Name (optional)</label><input class="f-input" type="text" id="rv-name" placeholder="Anonymous"></div>
+        <button class="btn primary" style="width:100%;justify-content:center" onclick="submitReview()">Submit Review</button>
+        <div style="margin-top:24px;border-top:1px solid var(--border);padding-top:20px">
+          <div style="font-size:13px;font-weight:700;margin-bottom:14px;color:var(--text2)">RECENT REVIEWS</div>
+          <div id="reviewsList"><div class="spin-wrap"><div class="spin"></div></div></div>
+        </div>
+      </div>
+    </div>
+
   </div><!-- /main -->
 </div><!-- /app -->
 
@@ -714,7 +803,46 @@ tr:hover td{background:var(--surface2)}
   <div class="modal-head"><div class="modal-title">₿ Add Crypto Trade</div><div class="modal-close" onclick="closeM('cryptoModal')">✕</div></div>
   <div class="modal-body">
     <div class="f-row">
-      <div class="f-group"><label class="f-label">Coin</label><input class="f-input" type="text" id="cr-coin" placeholder="BTC, ETH, SOL..."></div>
+      <div class="f-group">
+        <label class="f-label">Coin (type to search)</label>
+        <input class="f-input" type="text" id="cr-coin" placeholder="BTC, ETH, SOL..." list="coinList" autocomplete="off">
+        <datalist id="coinList">
+          <option value="BTC">Bitcoin</option><option value="ETH">Ethereum</option><option value="BNB">BNB</option>
+          <option value="SOL">Solana</option><option value="XRP">XRP</option><option value="DOGE">Dogecoin</option>
+          <option value="ADA">Cardano</option><option value="AVAX">Avalanche</option><option value="DOT">Polkadot</option>
+          <option value="LINK">Chainlink</option><option value="MATIC">Polygon</option><option value="UNI">Uniswap</option>
+          <option value="LTC">Litecoin</option><option value="BCH">Bitcoin Cash</option><option value="ATOM">Cosmos</option>
+          <option value="FIL">Filecoin</option><option value="TRX">TRON</option><option value="ETC">Ethereum Classic</option>
+          <option value="XLM">Stellar</option><option value="NEAR">NEAR</option><option value="APT">Aptos</option>
+          <option value="ARB">Arbitrum</option><option value="OP">Optimism</option><option value="SUI">Sui</option>
+          <option value="INJ">Injective</option><option value="PEPE">Pepe</option><option value="SHIB">Shiba Inu</option>
+          <option value="FTM">Fantom</option><option value="SAND">The Sandbox</option><option value="MANA">Decentraland</option>
+          <option value="AXS">Axie Infinity</option><option value="CHZ">Chiliz</option><option value="ENJ">Enjin</option>
+          <option value="GALA">Gala</option><option value="IMX">ImmutableX</option><option value="LDO">Lido</option>
+          <option value="MKR">Maker</option><option value="AAVE">Aave</option><option value="CRV">Curve</option>
+          <option value="SNX">Synthetix</option><option value="COMP">Compound</option><option value="YFI">Yearn</option>
+          <option value="1INCH">1inch</option><option value="BAL">Balancer</option><option value="SUSHI">SushiSwap</option>
+          <option value="CAKE">PancakeSwap</option><option value="RAY">Raydium</option><option value="JUP">Jupiter</option>
+          <option value="WIF">dogwifhat</option><option value="BONK">Bonk</option><option value="FLOKI">Floki</option>
+          <option value="TON">Toncoin</option><option value="NOT">Notcoin</option><option value="HMSTR">Hamster</option>
+          <option value="GRASS">Grass</option><option value="IO">io.net</option><option value="ZK">zkSync</option>
+          <option value="EIGEN">EigenLayer</option><option value="STRK">Starknet</option><option value="TIA">Celestia</option>
+          <option value="PYTH">Pyth</option><option value="JTO">Jito</option><option value="RNDR">Render</option>
+          <option value="FET">Fetch.ai</option><option value="AGIX">SingularityNET</option><option value="OCEAN">Ocean</option>
+          <option value="GRT">The Graph</option><option value="API3">API3</option><option value="BAND">Band</option>
+          <option value="VET">VeChain</option><option value="HBAR">Hedera</option><option value="ALGO">Algorand</option>
+          <option value="XTZ">Tezos</option><option value="EOS">EOS</option><option value="NEO">NEO</option>
+          <option value="ZEC">Zcash</option><option value="XMR">Monero</option><option value="DASH">Dash</option>
+          <option value="QTUM">Qtum</option><option value="ZIL">Zilliqa</option><option value="ICX">ICON</option>
+          <option value="ONT">Ontology</option><option value="WAVES">Waves</option><option value="KAVA">Kava</option>
+          <option value="CFX">Conflux</option><option value="ROSE">Oasis</option><option value="ONE">Harmony</option>
+          <option value="CELO">Celo</option><option value="FLOW">Flow</option><option value="KSM">Kusama</option>
+          <option value="OSMO">Osmosis</option><option value="SCRT">Secret</option><option value="EVMOS">Evmos</option>
+          <option value="GLMR">Moonbeam</option><option value="ACA">Acala</option><option value="MOVR">Moonriver</option>
+          <option value="KDA">Kadena</option><option value="EGLD">MultiversX</option><option value="THETA">Theta</option>
+          <option value="TFUEL">Theta Fuel</option><option value="CHR">Chromia</option><option value="ANKR">Ankr</option>
+        </datalist>
+      </div>
       <div class="f-group"><label class="f-label">Type</label><select class="f-input f-select" id="cr-type"><option value="buy">BUY</option><option value="sell">SELL</option><option value="hold">HOLD</option></select></div>
     </div>
     <div class="f-row">
@@ -723,7 +851,23 @@ tr:hover td{background:var(--surface2)}
     </div>
     <div class="f-row">
       <div class="f-group"><label class="f-label">Date</label><input class="f-input" type="date" id="cr-dt"></div>
-      <div class="f-group"><label class="f-label">Exchange</label><select class="f-input f-select" id="cr-exc"><option>Binance</option><option>Bybit</option><option>OKX</option><option>Other</option></select></div>
+      <div class="f-group"><label class="f-label">Exchange</label>
+        <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-top:4px" id="excGrid">
+          <div class="exc-btn on" data-exc="Binance" onclick="selExc(this)"><img src="https://cryptologos.cc/logos/binance-coin-bnb-logo.png" onerror="this.style.display='none'"><span>Binance</span></div>
+          <div class="exc-btn" data-exc="Bybit" onclick="selExc(this)"><img src="https://cryptologos.cc/logos/bybit-logo.png" onerror="this.style.display='none'"><span>Bybit</span></div>
+          <div class="exc-btn" data-exc="OKX" onclick="selExc(this)"><span>OKX</span></div>
+          <div class="exc-btn" data-exc="Coinbase" onclick="selExc(this)"><span>Coinbase</span></div>
+          <div class="exc-btn" data-exc="Kraken" onclick="selExc(this)"><span>Kraken</span></div>
+          <div class="exc-btn" data-exc="KuCoin" onclick="selExc(this)"><span>KuCoin</span></div>
+          <div class="exc-btn" data-exc="Gate.io" onclick="selExc(this)"><span>Gate.io</span></div>
+          <div class="exc-btn" data-exc="Bitget" onclick="selExc(this)"><span>Bitget</span></div>
+          <div class="exc-btn" data-exc="MEXC" onclick="selExc(this)"><span>MEXC</span></div>
+          <div class="exc-btn" data-exc="HTX" onclick="selExc(this)"><span>HTX</span></div>
+          <div class="exc-btn" data-exc="Bingx" onclick="selExc(this)"><span>BingX</span></div>
+          <div class="exc-btn add-exc" onclick="addCustomExc()"><span>＋ Add</span></div>
+        </div>
+        <input type="hidden" id="cr-exc" value="Binance">
+      </div>
     </div>
     <div class="f-group"><label class="f-label">Note / Setup</label><textarea class="f-input f-textarea" id="cr-note" placeholder="Trade reason, setup..."></textarea></div>
   </div>
@@ -781,7 +925,16 @@ tr:hover td{background:var(--surface2)}
   </div>
 </div></div>
 
-<!-- Toast -->
+<!-- Note Modal -->
+<div class="overlay" id="noteModal"><div class="modal">
+  <div class="modal-head"><div class="modal-title">📝 New Note</div><div class="modal-close" onclick="closeM('noteModal')">✕</div></div>
+  <div class="modal-body">
+    <div class="f-group"><label class="f-label">Title</label><input class="f-input" type="text" id="nt-title" placeholder="Note title..."></div>
+    <div class="f-group"><label class="f-label">Folder / Tag</label><input class="f-input" type="text" id="nt-folder" placeholder="e.g. Trading, Personal, Ideas..."></div>
+    <div class="f-group"><label class="f-label">Content</label><textarea class="f-input f-textarea" id="nt-content" placeholder="Write anything..." style="min-height:140px"></textarea></div>
+  </div>
+  <div class="modal-foot"><button class="btn" onclick="closeM('noteModal')">Cancel</button><button class="btn primary" onclick="saveNote()">Save Note</button></div>
+</div></div>
 <div class="toast-wrap" id="toastWrap"></div>
 
 <script>
@@ -1459,7 +1612,200 @@ function fmtD(d){if(!d)return'—';return new Date(d).toLocaleDateString('en-GB'
 function fmtLarge(n){if(n>=1e12)return(n/1e12).toFixed(2)+'T';if(n>=1e9)return(n/1e9).toFixed(2)+'B';if(n>=1e6)return(n/1e6).toFixed(2)+'M';return fmtN(n);}
 function curSym(c){return{USD:'$',EUR:'€',BDT:'৳'}[c]||c+' ';}
 
-// ── AUTO LOGIN ──
+
+// ── DASHBOARD CURRENCY TAB ──
+let dashCurFilter='all';
+function dashTab(cur,btn){
+  dashCurFilter=cur;
+  document.querySelectorAll('#dashCurTabs .ct-btn').forEach(b=>b.classList.remove('on'));
+  btn.classList.add('on');
+  loadDash();
+}
+
+// ── EXCHANGE SELECTOR ──
+function selExc(el){
+  document.querySelectorAll('.exc-btn:not(.add-exc)').forEach(b=>b.classList.remove('on'));
+  el.classList.add('on');
+  document.getElementById('cr-exc').value=el.dataset.exc;
+}
+function addCustomExc(){
+  const name=prompt('Exchange name:');
+  if(!name)return;
+  const grid=document.getElementById('excGrid');
+  const addBtn=grid.querySelector('.add-exc');
+  const div=document.createElement('div');
+  div.className='exc-btn';div.dataset.exc=name;
+  div.innerHTML=`<span>${name}</span>`;
+  div.onclick=function(){selExc(this);};
+  grid.insertBefore(div,addBtn);
+  selExc(div);
+}
+
+// ── TRADINGVIEW FIX ──
+function openCoinModal(sym,name,tvSym,coinId){
+  activeCoinSym=sym;activeCoinId=coinId;
+  document.getElementById('coinModalTitle').textContent=`${sym} — ${name}`;
+  const p=coinId?mktPrices[coinId]:null;
+  const ch=(p?.usd_24h_change||0).toFixed(2);
+  const mc=p?.usd_market_cap?'$'+fmtLarge(p.usd_market_cap):'—';
+  document.getElementById('coinStats').innerHTML=`
+    <div class="cs-item"><div class="cs-label">Price</div><div class="cs-val">$${p?fmtN(p.usd):'—'}</div></div>
+    <div class="cs-item"><div class="cs-label">24h Change</div><div class="cs-val" style="color:${ch>=0?'var(--green)':'var(--red)'}">${ch>=0?'▲':'▼'}${Math.abs(ch)}%</div></div>
+    <div class="cs-item"><div class="cs-label">Market Cap</div><div class="cs-val" style="font-size:11px">${mc}</div></div>`;
+  // TradingView - use iframe approach for reliability
+  const theme=document.documentElement.getAttribute('data-theme')==='dark'?'dark':'light';
+  document.getElementById('tvChart').innerHTML=`
+    <iframe
+      src="https://s.tradingview.com/widgetembed/?frameElementId=tv_embed&symbol=${tvSym}&interval=60&hidesidetoolbar=0&hidetoptoolbar=0&symboledit=1&saveimage=0&toolbarbg=${theme==='dark'?'161728':'ffffff'}&studies=[]&theme=${theme}&style=1&timezone=Etc%2FUTC&studies_overrides={}&overrides={}&enabled_features=[]&disabled_features=[]&locale=en&utm_source=localhost"
+      style="width:100%;height:400px;border:none;border-radius:8px"
+      allowtransparency="true"
+      scrolling="no"
+    ></iframe>`;
+  loadAlertsUI();
+  openM('coinModal');
+}
+
+// ── NOTES ──
+let noteFolder=null;
+async function loadNotes(folder=null){
+  noteFolder=folder;
+  let q=db.from('notes').select('*').eq('user_id',U.id).order('created_at',{ascending:false});
+  if(folder)q=q.eq('folder',folder);
+  const{data:notes}=await q;
+  // Build folders
+  const{data:allNotes}=await db.from('notes').select('folder').eq('user_id',U.id);
+  const folders=[...new Set(allNotes?.map(n=>n.folder).filter(Boolean))];
+  document.getElementById('noteFolders').innerHTML=
+    `<button class="cp ${!folder?'on':''}" onclick="loadNotes(null)">All</button>`+
+    folders.map(f=>`<button class="cp ${folder===f?'on':''}" onclick="loadNotes('${f}')">${f}</button>`).join('');
+  const list=document.getElementById('notesList');
+  if(!notes?.length){list.innerHTML='<div class="empty" style="grid-column:1/-1"><div class="empty-ic">📝</div><div class="empty-title">No notes yet</div><div class="empty-sub">Create your first note</div></div>';return;}
+  list.innerHTML=notes.map(n=>`
+    <div class="note-card" onclick="openNoteEdit('${n.id}')">
+      <button class="note-del" onclick="event.stopPropagation();delNote('${n.id}')">🗑</button>
+      ${n.folder?`<div class="note-folder">${n.folder}</div>`:''}
+      <div class="note-title">${n.title||'Untitled'}</div>
+      <div class="note-preview">${n.content||''}</div>
+      <div class="note-date">${fmtD(n.created_at?.split('T')[0])}</div>
+    </div>`).join('');
+}
+async function saveNote(){
+  const title=document.getElementById('nt-title').value;
+  const folder=document.getElementById('nt-folder').value;
+  const content=document.getElementById('nt-content').value;
+  if(!title&&!content)return toast('Write something first','err');
+  await db.from('notes').insert({user_id:U.id,title,folder,content});
+  closeM('noteModal');toast('Note saved!','ok');
+  document.getElementById('nt-title').value='';
+  document.getElementById('nt-folder').value='';
+  document.getElementById('nt-content').value='';
+  loadNotes(noteFolder);
+}
+async function openNoteEdit(id){
+  const{data:n}=await db.from('notes').select('*').eq('id',id).single();
+  if(!n)return;
+  document.getElementById('nt-title').value=n.title||'';
+  document.getElementById('nt-folder').value=n.folder||'';
+  document.getElementById('nt-content').value=n.content||'';
+  // delete old and re-save on confirm
+  const confirmed=confirm('Edit this note? (will overwrite)');
+  if(!confirmed)return;
+  await db.from('notes').delete().eq('id',id);
+  openM('noteModal');
+}
+async function delNote(id){if(!confirm('Delete note?'))return;await db.from('notes').delete().eq('id',id);toast('Deleted','info');loadNotes(noteFolder);}
+
+// ── PROFILE ──
+function loadProfile(){
+  const n=U?.user_metadata?.full_name||U?.email?.split('@')[0]||'User';
+  document.getElementById('profileName').textContent=n;
+  document.getElementById('profileEmail').textContent=U?.email||'';
+  document.getElementById('profileAvatar').textContent=n[0].toUpperCase();
+  document.getElementById('pf-name').value=n;
+}
+async function updateName(){
+  const name=document.getElementById('pf-name').value;
+  if(!name)return toast('Enter name','err');
+  const{error}=await db.auth.updateUser({data:{full_name:name}});
+  if(error)return toast(error.message,'err');
+  toast('Name updated!','ok');
+  document.getElementById('sbName').textContent=name;
+  document.getElementById('profileName').textContent=name;
+  document.getElementById('profileAvatar').textContent=name[0].toUpperCase();
+  document.getElementById('sbAv').textContent=name[0].toUpperCase();
+  document.getElementById('greeting').textContent=(new Date().getHours()<12?'🌅 Morning':(new Date().getHours()<17?'☀️ Afternoon':'🌙 Evening'))+', '+name.split(' ')[0]+'!';
+}
+async function updatePass(){
+  const p=document.getElementById('pf-pass').value,p2=document.getElementById('pf-pass2').value;
+  if(!p)return toast('Enter new password','err');
+  if(p!==p2)return toast('Passwords do not match','err');
+  if(p.length<6)return toast('Min 6 characters','err');
+  const{error}=await db.auth.updateUser({password:p});
+  if(error)return toast(error.message,'err');
+  toast('Password updated!','ok');
+  document.getElementById('pf-pass').value='';document.getElementById('pf-pass2').value='';
+}
+
+// ── REVIEW ──
+let userStars=0;
+function setStars(n){userStars=n;renderStars();}
+function hoverStars(n){
+  const stars=document.querySelectorAll('#starRow span');
+  stars.forEach((s,i)=>{s.style.transform=i<n?'scale(1.3)':'scale(1)';s.style.filter=i<n?'brightness(1.3)':'grayscale(0.5)';});
+}
+function renderStars(){
+  const stars=document.querySelectorAll('#starRow span');
+  stars.forEach((s,i)=>{s.style.transform=i<userStars?'scale(1.2)':'scale(1)';s.style.filter=i<userStars?'brightness(1.2)':'grayscale(0.3)';});
+}
+async function submitReview(){
+  if(!userStars)return toast('Select a star rating','err');
+  const text=document.getElementById('rv-text').value;
+  const name=document.getElementById('rv-name').value||'Anonymous';
+  await db.from('reviews').insert({user_id:U.id,stars:userStars,review_text:text,reviewer_name:name});
+  toast('Thank you for your review! ⭐','ok');
+  document.getElementById('rv-text').value='';document.getElementById('rv-name').value='';
+  userStars=0;renderStars();loadReviews();
+}
+async function loadReviews(){
+  const{data:rvs}=await db.from('reviews').select('*').order('created_at',{ascending:false}).limit(20);
+  const list=document.getElementById('reviewsList');
+  if(!rvs?.length){list.innerHTML='<div class="empty"><div class="empty-ic">💬</div><div class="empty-title">No reviews yet</div></div>';return;}
+  list.innerHTML=rvs.map(r=>`
+    <div class="rv-card">
+      <div class="rv-stars">${'⭐'.repeat(r.stars)}${'☆'.repeat(5-r.stars)}</div>
+      <div class="rv-text">${r.review_text||'—'}</div>
+      <div class="rv-meta">${r.reviewer_name} · ${fmtD(r.created_at?.split('T')[0])}</div>
+    </div>`).join('');
+}
+
+// ── OVERRIDE NAV for new pages ──
+const _origNav=nav;
+// Patch nav to load new pages
+const _navOrig=nav;
+function nav(pg){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('on'));
+  document.querySelectorAll('.nav').forEach(n=>n.classList.remove('on'));
+  document.querySelectorAll('.bn-item').forEach(n=>n.classList.remove('on'));
+  document.getElementById('pg-'+pg)?.classList.add('on');
+  document.querySelectorAll('.nav').forEach(n=>{
+    const txt=n.textContent.toLowerCase();
+    if((pg==='dashboard'&&txt.includes('dashboard'))||(pg==='market'&&txt.includes('market'))||(pg==='finance'&&txt.includes('account'))||(pg==='budget'&&txt.includes('budget'))||(pg==='crypto'&&txt.includes('portfolio'))||(pg==='watchlist'&&txt.includes('watchlist'))||(pg==='investment'&&txt.includes('invest'))||(pg==='tools'&&txt.includes('trading'))||(pg==='converter'&&txt.includes('convert'))||(pg==='notes'&&txt.includes('note'))||(pg==='profile'&&txt.includes('profile'))||(pg==='review'&&txt.includes('rate')))n.classList.add('on');
+  });
+  const bnPages=['dashboard','market','finance','crypto','tools','converter'];
+  document.querySelectorAll('.bn-item').forEach((n,i)=>{if(bnPages[i]===pg)n.classList.add('on');});
+  if(pg==='market')loadMktPage();
+  if(pg==='crypto')loadCryptoPage();
+  if(pg==='investment')loadInv();
+  if(pg==='watchlist')loadWL();
+  if(pg==='budget')loadBudgets();
+  if(pg==='tools')loadSignals();
+  if(pg==='converter'){convCrypto();convCur();}
+  if(pg==='notes')loadNotes();
+  if(pg==='profile')loadProfile();
+  if(pg==='review')loadReviews();
+  if(window.innerWidth<=768)toggleSB(false);
+}
+
 db.auth.getSession().then(({data:{session}})=>{
   if(session){U=session.user;setUserUI().then(()=>showApp());}
 });
