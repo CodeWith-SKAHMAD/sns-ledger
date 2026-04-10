@@ -145,7 +145,7 @@ html,body{font-family:var(--font);background:var(--bg);color:var(--text);min-hei
 .sec{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:22px;margin-bottom:16px}
 .sh{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px;flex-wrap:wrap;gap:10px}
 .st{font-size:15px;font-weight:700;display:flex;align-items:center;gap:10px}
-.si{width:32px;height:32px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:17px;background:rgba(99,102,241,.1);flex-shrink:0}
+.si{width:32px;height:32px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:16px;background:rgba(99,102,241,.12);border:1px solid rgba(99,102,241,.15);flex-shrink:0}
 
 /* ═══ TABLE ═══ */
 .tw{overflow-x:auto;border-radius:var(--r2);border:1px solid var(--border)}
@@ -365,7 +365,7 @@ tr:hover td{background:var(--surface2)}
 .mob-logo img{width:26px;height:26px;border-radius:6px;object-fit:cover}
 .mob-logo span{font-size:14px;font-weight:800;background:linear-gradient(135deg,var(--accent),var(--accent2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
 .mob-acts{display:flex;gap:4px}
-.mob-btn{width:32px;height:32px;background:var(--surface2);border:1px solid var(--border);border-radius:8px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:15px;color:var(--text2);transition:all .2s}
+.mob-btn{width:36px;height:36px;background:var(--surface2);border:1.5px solid var(--border);border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:16px;color:var(--text2);transition:all .2s}
 .mob-btn:hover{background:var(--border2)}
 .sb-ov{display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:299;backdrop-filter:blur(4px)}
 
@@ -451,11 +451,9 @@ tr:hover td{background:var(--surface2)}
 <div class="mob-tb" id="mobTb">
   <div class="mob-logo" onclick="nav('dashboard')" style="cursor:pointer"><img src="logo.jpg" alt=""><span>SN's Ledger</span></div>
   <div class="mob-acts">
-    <div class="mob-btn" id="themeBtn" onclick="toggleTheme()">🌙</div>
-    <div class="mob-btn" onclick="refreshMkt()" title="Refresh">🔄</div>
-    <div class="mob-btn" onclick="nav('news')">📰</div>
-    <div class="mob-btn" style="color:#f72585" onclick="logout()">🚪</div>
-    <div class="mob-btn" onclick="toggleSB()">☰</div>
+    <div class="mob-btn" id="themeBtn" onclick="toggleTheme()" title="Theme">🌙</div>
+    <div class="mob-btn" onclick="logout()" title="Logout" style="background:rgba(247,37,133,.12);border-color:rgba(247,37,133,.2);color:#f72585">🚪</div>
+    <div class="mob-btn" onclick="toggleSB()" title="Menu" style="background:rgba(99,102,241,.12);border-color:rgba(99,102,241,.2);color:#6366f1">☰</div>
   </div>
 </div>
 <div class="sb-ov" id="sbOv" onclick="toggleSB(false)"></div>
@@ -476,7 +474,7 @@ tr:hover td{background:var(--surface2)}
 <div class="sidebar" id="sidebar">
   <div class="sb-head" onclick="nav('dashboard')" style="cursor:pointer">
     <img src="logo.jpg" alt="">
-    <div class="sb-head-text"><h2>SN's Ledger</h2><p>v4.0.2</p></div>
+    <div class="sb-head-text"><h2>SN's Ledger</h2><p>v4.0.3</p></div>
   </div>
   <div class="sb-user" onclick="nav('profile')">
     <div class="sb-av" id="sbAv">S</div>
@@ -484,40 +482,40 @@ tr:hover td{background:var(--surface2)}
   </div>
   <div style="flex:1;overflow-y:auto;padding-bottom:8px">
     <div class="sb-sec"><div class="sb-sec-label">Overview</div>
-      <div class="nv on" onclick="nav('dashboard')"><div class="nv-ic"><img src="https://img.icons8.com/ios-filled/50/home.png" alt=""></div>Dashboard</div>
-      <div class="nv" onclick="nav('market')"><div class="nv-ic"><img src="https://img.icons8.com/ios-filled/50/combo-chart.png" alt=""></div>Live Market</div>
-      <div class="nv" onclick="nav('news')"><div class="nv-ic"><img src="https://img.icons8.com/ios-filled/50/news.png" alt=""></div>Crypto News</div>
+      <div class="nv on" onclick="nav('dashboard')"><div class="nv-ic" style="background:rgba(99,102,241,.15);color:#6366f1">🏠</div>Dashboard</div>
+      <div class="nv" onclick="nav('market')"><div class="nv-ic" style="background:rgba(6,214,160,.15);color:#06d6a0">📈</div>Live Market</div>
+      <div class="nv" onclick="nav('news')"><div class="nv-ic" style="background:rgba(56,189,248,.15);color:#38bdf8">📰</div>Crypto News</div>
     </div>
     <div class="sb-sec"><div class="sb-sec-label">Finance</div>
-      <div class="nv" onclick="nav('finance')"><div class="nv-ic"><img src="https://img.icons8.com/ios-filled/50/wallet.png" alt=""></div>Accounts</div>
-      <div class="nv" onclick="nav('budget')"><div class="nv-ic"><img src="https://img.icons8.com/ios-filled/50/budget.png" alt=""></div>Budget</div>
+      <div class="nv" onclick="nav('finance')"><div class="nv-ic" style="background:rgba(251,191,36,.15);color:#fbbf24">💳</div>Accounts</div>
+      <div class="nv" onclick="nav('budget')"><div class="nv-ic" style="background:rgba(247,37,133,.15);color:#f72585">🎯</div>Budget</div>
     </div>
     <div class="sb-sec"><div class="sb-sec-label">Crypto</div>
-      <div class="nv" onclick="nav('crypto')"><div class="nv-ic"><img src="https://img.icons8.com/ios-filled/50/bitcoin.png" alt=""></div>Portfolio</div>
-      <div class="nv" onclick="nav('watchlist')"><div class="nv-ic"><img src="https://img.icons8.com/ios-filled/50/star.png" alt=""></div>Watchlist</div>
-      <div class="nv" onclick="nav('investment')"><div class="nv-ic"><img src="https://img.icons8.com/ios-filled/50/increase.png" alt=""></div>Investments</div>
+      <div class="nv" onclick="nav('crypto')"><div class="nv-ic" style="background:rgba(249,115,22,.15);color:#f97316">₿</div>Portfolio</div>
+      <div class="nv" onclick="nav('watchlist')"><div class="nv-ic" style="background:rgba(251,191,36,.15);color:#fbbf24">⭐</div>Watchlist</div>
+      <div class="nv" onclick="nav('investment')"><div class="nv-ic" style="background:rgba(168,85,247,.15);color:#a855f7">📊</div>Investments</div>
     </div>
     <div class="sb-sec"><div class="sb-sec-label">Tools</div>
-      <div class="nv" onclick="nav('tools')"><div class="nv-ic"><img src="https://img.icons8.com/ios-filled/50/maintenance.png" alt=""></div>Trading Tools</div>
-      <div class="nv" onclick="nav('converter')"><div class="nv-ic"><img src="https://img.icons8.com/ios-filled/50/exchange.png" alt=""></div>Converter</div>
-      <div class="nv" onclick="nav('calc')"><div class="nv-ic"><img src="https://img.icons8.com/ios-filled/50/calculator.png" alt=""></div>Calculator</div>
+      <div class="nv" onclick="nav('tools')"><div class="nv-ic" style="background:rgba(6,214,160,.15);color:#06d6a0">🛠</div>Trading Tools</div>
+      <div class="nv" onclick="nav('converter')"><div class="nv-ic" style="background:rgba(56,189,248,.15);color:#38bdf8">🔄</div>Converter</div>
+      <div class="nv" onclick="nav('calc')"><div class="nv-ic" style="background:rgba(99,102,241,.15);color:#6366f1">🧮</div>Calculator</div>
     </div>
     <div class="sb-sec"><div class="sb-sec-label">Planning</div>
-      <div class="nv" onclick="nav('goals')"><div class="nv-ic"><img src="https://img.icons8.com/ios-filled/50/goal.png" alt=""></div>Savings Goals</div>
-      <div class="nv" onclick="nav('sltp')"><div class="nv-ic"><img src="https://img.icons8.com/ios-filled/50/alarm.png" alt=""></div>SL/TP Reminders</div>
+      <div class="nv" onclick="nav('goals')"><div class="nv-ic" style="background:rgba(6,214,160,.15);color:#06d6a0">🎯</div>Savings Goals</div>
+      <div class="nv" onclick="nav('sltp')"><div class="nv-ic" style="background:rgba(247,37,133,.15);color:#f72585">🔔</div>SL/TP Reminders</div>
     </div>
     <div class="sb-sec"><div class="sb-sec-label">More</div>
-      <div class="nv" onclick="nav('notes')"><div class="nv-ic"><img src="https://img.icons8.com/ios-filled/50/note.png" alt=""></div>My Notes</div>
-      <div class="nv" onclick="nav('profile')"><div class="nv-ic"><img src="https://img.icons8.com/ios-filled/50/user.png" alt=""></div>Profile</div>
-      <div class="nv" onclick="nav('review')"><div class="nv-ic"><img src="https://img.icons8.com/ios-filled/50/rating.png" alt=""></div>Rate App</div>
+      <div class="nv" onclick="nav('notes')"><div class="nv-ic" style="background:rgba(251,191,36,.15);color:#fbbf24">📝</div>My Notes</div>
+      <div class="nv" onclick="nav('profile')"><div class="nv-ic" style="background:rgba(6,214,160,.15);color:#06d6a0">👤</div>Profile</div>
+      <div class="nv" onclick="nav('review')"><div class="nv-ic" style="background:rgba(247,37,133,.15);color:#f72585">⭐</div>Rate App</div>
     </div>
   </div>
   <div class="sb-foot">
     <div class="sb-foot-row">
-      <button class="ib" onclick="toggleTheme()" id="sbThemeBtn" title="Theme"><img src="https://img.icons8.com/ios-filled/50/moon-symbol.png" style="width:16px;height:16px;filter:invert(.6)"></button>
-      <button class="ib" onclick="exportXLSX()" title="Export"><img src="https://img.icons8.com/ios-filled/50/export.png" style="width:16px;height:16px;filter:invert(.6)"></button>
-      <button class="ib" onclick="backupJSON()" title="Backup"><img src="https://img.icons8.com/ios-filled/50/save.png" style="width:16px;height:16px;filter:invert(.6)"></button>
-      <button class="ib red" onclick="logout()" title="Logout"><img src="https://img.icons8.com/ios-filled/50/exit.png" style="width:16px;height:16px;filter:invert(.5) sepia(1) saturate(5) hue-rotate(300deg)"></button>
+      <button class="ib" onclick="toggleTheme()" id="sbThemeBtn" title="Theme" style="font-size:18px">🌙</button>
+      <button class="ib" onclick="exportXLSX()" title="Export" style="font-size:18px">📤</button>
+      <button class="ib" onclick="backupJSON()" title="Backup" style="font-size:18px">💾</button>
+      <button class="ib red" onclick="logout()" title="Logout" style="font-size:18px">🚪</button>
     </div>
   </div>
 </div>
@@ -544,20 +542,20 @@ tr:hover td{background:var(--surface2)}
         <div class="kpi"><div class="kpi-bar" style="background:linear-gradient(90deg,var(--accent),var(--purple))"></div><div class="kpi-label">Crypto P&L</div><div class="kpi-val" id="d-pnl">$0.00</div><div class="kpi-sub">Portfolio</div></div>
       </div>
       <div class="g2">
-        <div class="sec"><div class="sh"><div class="st"><div class="si"><img src="https://img.icons8.com/ios-filled/50/pie-chart.png" style="width:16px;height:16px;filter:invert(.6)"></div>Expense Breakdown</div></div><div class="ch-box"><canvas id="expChart"></canvas></div></div>
-        <div class="sec"><div class="sh"><div class="st"><div class="si"><img src="https://img.icons8.com/ios-filled/50/bar-chart.png" style="width:16px;height:16px;filter:invert(.6)"></div>Monthly Overview</div></div><div class="ch-box"><canvas id="mnthChart"></canvas></div></div>
+        <div class="sec"><div class="sh"><div class="st"><div class="si">🥧</div>Expense Breakdown</div></div><div class="ch-box"><canvas id="expChart"></canvas></div></div>
+        <div class="sec"><div class="sh"><div class="st"><div class="si">📊</div>Monthly Overview</div></div><div class="ch-box"><canvas id="mnthChart"></canvas></div></div>
       </div>
       <div class="g2">
-        <div class="sec"><div class="sh"><div class="st"><div class="si"><img src="https://img.icons8.com/ios-filled/50/cost.png" style="width:16px;height:16px;filter:invert(.6)"></div>This Week's Spending</div></div><div class="week-bars" id="weekBars"></div></div>
-        <div class="sec"><div class="sh"><div class="st"><div class="si"><img src="https://img.icons8.com/ios-filled/50/increase.png" style="width:16px;height:16px;filter:invert(.6)"></div>Net Worth Over Time</div></div><div class="ch-box" style="height:140px"><canvas id="nwChart"></canvas></div></div>
+        <div class="sec"><div class="sh"><div class="st"><div class="si">💸</div>This Week's Spending</div></div><div class="week-bars" id="weekBars"></div></div>
+        <div class="sec"><div class="sh"><div class="st"><div class="si">📈</div>Net Worth Over Time</div></div><div class="ch-box" style="height:140px"><canvas id="nwChart"></canvas></div></div>
       </div>
       <!-- Recent news on dashboard -->
       <div class="sec">
-        <div class="sh"><div class="st"><div class="si"><img src="https://img.icons8.com/ios-filled/50/news.png" style="width:16px;height:16px;filter:invert(.6)"></div>Latest Crypto News</div><button class="btn sm" onclick="nav('news')">All News →</button></div>
+        <div class="sh"><div class="st"><div class="si">📰</div>Latest Crypto News</div><button class="btn sm" onclick="nav('news')">All News →</button></div>
         <div id="dashNews"><div class="loading"><div class="spin"></div></div></div>
       </div>
       <div class="sec">
-        <div class="sh"><div class="st"><div class="si"><img src="https://img.icons8.com/ios-filled/50/clock.png" style="width:16px;height:16px;filter:invert(.6)"></div>Recent Transactions</div><button class="btn sm" onclick="nav('finance')">View All →</button></div>
+        <div class="sh"><div class="st"><div class="si">🕐</div>Recent Transactions</div><button class="btn sm" onclick="nav('finance')">View All →</button></div>
         <div class="tw"><table><thead><tr><th>Date</th><th>Description</th><th>Category</th><th>Account</th><th>Amount</th></tr></thead><tbody id="recentTx"><tr><td colspan="5"><div class="loading"><div class="spin"></div></div></td></tr></tbody></table></div>
       </div>
     </div>
@@ -567,8 +565,8 @@ tr:hover td{background:var(--surface2)}
   <div class="pg" id="pg-market">
     <div class="topbar"><div class="tb-left"><div class="tb-title">Live <span class="accent">Market</span></div></div><button class="btn pri sm" onclick="refreshMkt()">🔄 Refresh</button></div>
     <div class="page-body">
-      <div class="sec" style="margin-bottom:14px"><div class="sh"><div class="st"><div class="si"><img src="https://img.icons8.com/ios-filled/50/coin.png" style="width:16px;height:16px;filter:invert(.6)"></div>Crypto — Click for chart & alerts</div></div><div class="mg" id="cryptoMg"><div class="loading"><div class="spin"></div></div></div></div>
-      <div class="sec"><div class="sh"><div class="st"><div class="si"><img src="https://img.icons8.com/ios-filled/50/bar-chart.png" style="width:16px;height:16px;filter:invert(.6)"></div>Stocks & ETFs</div></div><div class="mg" id="stockMg"><div class="loading"><div class="spin"></div></div></div></div>
+      <div class="sec" style="margin-bottom:14px"><div class="sh"><div class="st"><div class="si">🪙</div>Crypto — Click for chart & alerts</div></div><div class="mg" id="cryptoMg"><div class="loading"><div class="spin"></div></div></div></div>
+      <div class="sec"><div class="sh"><div class="st"><div class="si">📊</div>Stocks & ETFs</div></div><div class="mg" id="stockMg"><div class="loading"><div class="spin"></div></div></div></div>
     </div>
   </div>
 
@@ -585,7 +583,7 @@ tr:hover td{background:var(--surface2)}
         <div id="watcherPosts"><div class="loading"><div class="spin"></div></div></div>
       </div>
       <div class="sec">
-        <div class="sh"><div class="st"><div class="si"><img src="https://img.icons8.com/ios-filled/50/news.png" style="width:16px;height:16px;filter:invert(.6)"></div>Top Crypto News</div></div>
+        <div class="sh"><div class="st"><div class="si">📰</div>Top Crypto News</div></div>
         <div class="news-grid" id="newsGrid"><div class="loading"><div class="spin"></div></div></div>
       </div>
     </div>
@@ -603,7 +601,7 @@ tr:hover td{background:var(--surface2)}
       <div id="accTxSec" style="display:none">
         <div class="sec">
           <div class="sh">
-            <div class="st"><div class="si"><img src="https://img.icons8.com/ios-filled/50/credit-card.png" style="width:16px;height:16px;filter:invert(.6)"></div><span id="accTxTt">Transactions</span></div>
+            <div class="st"><div class="si">💳</div><span id="accTxTt">Transactions</span></div>
             <div style="display:flex;gap:7px;flex-wrap:wrap">
               <button class="btn pri sm" onclick="openM('txModal','in')">＋ Cash In</button>
               <button class="btn danger sm" onclick="openM('txModal','out')">− Cash Out</button>
@@ -621,7 +619,7 @@ tr:hover td{background:var(--surface2)}
   <div class="pg" id="pg-budget">
     <div class="topbar"><div class="tb-left"><div class="tb-title">Budget <span class="accent">Control</span></div></div><button class="btn pri sm" onclick="openM('budgetModal')">＋ Set Budget</button></div>
     <div class="page-body">
-      <div class="sec"><div class="sh"><div class="st"><div class="si"><img src="https://img.icons8.com/ios-filled/50/target.png" style="width:16px;height:16px;filter:invert(.6)"></div>This Month</div></div><div id="budgetList"><div class="loading"><div class="spin"></div></div></div></div>
+      <div class="sec"><div class="sh"><div class="st"><div class="si">🎯</div>This Month</div></div><div id="budgetList"><div class="loading"><div class="spin"></div></div></div></div>
     </div>
   </div>
 
@@ -637,18 +635,18 @@ tr:hover td{background:var(--surface2)}
       </div>
       <div class="g2" style="margin-bottom:14px">
         <div class="sec">
-          <div class="sh"><div class="st"><div class="si"><img src="https://img.icons8.com/ios-filled/50/increase.png" style="width:16px;height:16px;filter:invert(.6)"></div>Performance</div><div class="ch-tabs"><button class="ct on" onclick="ctab(this,'7d')">7D</button><button class="ct" onclick="ctab(this,'30d')">1M</button><button class="ct" onclick="ctab(this,'all')">All</button></div></div>
+          <div class="sh"><div class="st"><div class="si">📈</div>Performance</div><div class="ch-tabs"><button class="ct on" onclick="ctab(this,'7d')">7D</button><button class="ct" onclick="ctab(this,'30d')">1M</button><button class="ct" onclick="ctab(this,'all')">All</button></div></div>
           <div class="ch-box"><canvas id="cryptoChart"></canvas></div>
         </div>
         <div class="sec">
-          <div class="sh"><div class="st"><div class="si"><img src="https://img.icons8.com/ios-filled/50/pie-chart.png" style="width:16px;height:16px;filter:invert(.6)"></div>Portfolio Allocation</div></div>
+          <div class="sh"><div class="st"><div class="si">🥧</div>Portfolio Allocation</div></div>
           <div class="port-pie-wrap">
             <div class="ch-box" style="height:180px"><canvas id="portPieChart"></canvas></div>
             <div class="port-legend" id="portLegend"></div>
           </div>
         </div>
       </div>
-      <div class="sec"><div class="sh"><div class="st"><div class="si"><img src="https://img.icons8.com/ios-filled/50/bitcoin.png" style="width:16px;height:16px;filter:invert(.6)"></div>Trade Log</div></div><div class="tw"><table><thead><tr><th>Date</th><th>Coin</th><th>Type</th><th>Qty</th><th>Price</th><th>Total</th><th>Exchange</th><th>Note</th><th>Unrealized P&L</th><th></th></tr></thead><tbody id="cryptoTb"><tr><td colspan="10"><div class="loading"><div class="spin"></div></div></td></tr></tbody></table></div></div>
+      <div class="sec"><div class="sh"><div class="st"><div class="si">₿</div>Trade Log</div></div><div class="tw"><table><thead><tr><th>Date</th><th>Coin</th><th>Type</th><th>Qty</th><th>Price</th><th>Total</th><th>Exchange</th><th>Note</th><th>Unrealized P&L</th><th></th></tr></thead><tbody id="cryptoTb"><tr><td colspan="10"><div class="loading"><div class="spin"></div></div></td></tr></tbody></table></div></div>
     </div>
   </div>
 
@@ -667,8 +665,8 @@ tr:hover td{background:var(--surface2)}
         <div class="kpi"><div class="kpi-bar" style="background:var(--accent)"></div><div class="kpi-label">Current Value</div><div class="kpi-val" id="i-cur">$0</div></div>
         <div class="kpi"><div class="kpi-bar" style="background:var(--green)"></div><div class="kpi-label">Total Return</div><div class="kpi-val g" id="i-ret">$0</div></div>
       </div>
-      <div class="sec" style="margin-bottom:14px"><div class="sh"><div class="st"><div class="si"><img src="https://img.icons8.com/ios-filled/50/increase.png" style="width:16px;height:16px;filter:invert(.6)"></div>Growth</div></div><div class="ch-box"><canvas id="invChart"></canvas></div></div>
-      <div class="sec"><div class="sh"><div class="st"><div class="si"><img src="https://img.icons8.com/ios-filled/50/list.png" style="width:16px;height:16px;filter:invert(.6)"></div>Investments</div></div><div id="invList"><div class="loading"><div class="spin"></div></div></div></div>
+      <div class="sec" style="margin-bottom:14px"><div class="sh"><div class="st"><div class="si">📈</div>Growth</div></div><div class="ch-box"><canvas id="invChart"></canvas></div></div>
+      <div class="sec"><div class="sh"><div class="st"><div class="si">📋</div>Investments</div></div><div id="invList"><div class="loading"><div class="spin"></div></div></div></div>
     </div>
   </div>
 
@@ -677,7 +675,7 @@ tr:hover td{background:var(--surface2)}
     <div class="topbar"><div class="tb-left"><div class="tb-title">Trading <span class="accent">Tools</span></div></div></div>
     <div class="page-body">
       <div class="sec" style="margin-bottom:16px">
-        <div class="sh"><div class="st"><div class="si"><img src="https://img.icons8.com/ios-filled/50/bot.png" style="width:16px;height:16px;filter:invert(.6)"></div>TA Signals</div>
+        <div class="sh"><div class="st"><div class="si">🤖</div>TA Signals</div>
           <div style="display:flex;gap:7px;align-items:center;flex-wrap:wrap">
             <div style="display:flex;gap:4px" id="tfBtns">
               <button class="ct on" onclick="setTF('30m',this)">30m</button>
@@ -715,7 +713,7 @@ tr:hover td{background:var(--surface2)}
     <div class="topbar"><div class="tb-left"><div class="tb-title">🔄 <span class="accent">Converter</span></div></div></div>
     <div class="page-body">
       <div class="g2">
-        <div class="sec"><div class="sh"><div class="st"><div class="si"><img src="https://img.icons8.com/ios-filled/50/coin.png" style="width:16px;height:16px;filter:invert(.6)"></div>Crypto</div></div>
+        <div class="sec"><div class="sh"><div class="st"><div class="si">🪙</div>Crypto</div></div>
           <div class="fg"><label class="fl">Amount</label><input class="fi" type="number" id="cc-a" value="1" oninput="convCrypto()"></div>
           <div class="cv-pair">
             <div class="fg" style="margin:0"><label class="fl">From</label><select class="fi fi-select" id="cc-f" onchange="convCrypto()"><option value="bitcoin">BTC</option><option value="ethereum">ETH</option><option value="binancecoin">BNB</option><option value="solana">SOL</option><option value="ripple">XRP</option><option value="dogecoin">DOGE</option></select></div>
@@ -829,7 +827,7 @@ tr:hover td{background:var(--surface2)}
           </div>
         </div>
         <div class="sec">
-          <div class="sh"><div class="st"><div class="si"><img src="https://img.icons8.com/ios-filled/50/speech-bubble.png" style="width:16px;height:16px;filter:invert(.6)"></div>Recent Reviews</div></div>
+          <div class="sh"><div class="st"><div class="si">💬</div>Recent Reviews</div></div>
           <div id="rvList"><div class="loading"><div class="spin"></div></div></div>
         </div>
       </div>
@@ -846,7 +844,7 @@ tr:hover td{background:var(--surface2)}
         <div class="kpi"><div class="kpi-bar" style="background:var(--green)"></div><div class="kpi-label">Completed</div><div class="kpi-val g" id="g-done">0</div></div>
         <div class="kpi"><div class="kpi-bar" style="background:var(--yellow)"></div><div class="kpi-label">In Progress</div><div class="kpi-val y" id="g-prog">0</div></div>
       </div>
-      <div class="sec"><div class="sh"><div class="st"><div class="si"><img src="https://img.icons8.com/ios-filled/50/goal.png" style="width:16px;height:16px;filter:invert(.6)"></div>My Goals</div></div><div id="goalList"><div class="loading"><div class="spin"></div></div></div></div>
+      <div class="sec"><div class="sh"><div class="st"><div class="si">🎯</div>My Goals</div></div><div id="goalList"><div class="loading"><div class="spin"></div></div></div></div>
     </div>
   </div>
 
@@ -855,8 +853,8 @@ tr:hover td{background:var(--surface2)}
     <div class="topbar"><div class="tb-left"><div class="tb-title">SL/TP <span class="accent">Reminders</span></div></div><button class="btn pri sm" onclick="openM('sltpModal')">＋ Add Reminder</button></div>
     <div class="page-body">
       <div style="background:rgba(251,191,36,.07);border:1px solid rgba(251,191,36,.2);border-radius:10px;padding:12px 16px;margin-bottom:16px;font-size:12px;color:var(--yellow)">🔔 Price alerts check every 30 seconds while app is open. Enable browser notifications for best experience.</div>
-      <div class="sec"><div class="sh"><div class="st"><div class="si"><img src="https://img.icons8.com/ios-filled/50/alarm.png" style="width:16px;height:16px;filter:invert(.6)"></div>Active Reminders</div><button class="btn sm" onclick="checkSLTP()">🔄 Check Now</button></div><div class="sltp-list" id="sltpList"><div class="empty"><div class="empty-ic">🔔</div><div class="empty-tt">No reminders</div><div class="empty-s">Add SL/TP for your positions</div></div></div></div>
-      <div class="sec"><div class="sh"><div class="st"><div class="si"><img src="https://img.icons8.com/ios-filled/50/bitcoin.png" style="width:16px;height:16px;filter:invert(.6)"></div>Portfolio Avg Buy Price</div></div><div id="avgBuyList"><div class="loading"><div class="spin"></div></div></div></div>
+      <div class="sec"><div class="sh"><div class="st"><div class="si">🔔</div>Active Reminders</div><button class="btn sm" onclick="checkSLTP()">🔄 Check Now</button></div><div class="sltp-list" id="sltpList"><div class="empty"><div class="empty-ic">🔔</div><div class="empty-tt">No reminders</div><div class="empty-s">Add SL/TP for your positions</div></div></div></div>
+      <div class="sec"><div class="sh"><div class="st"><div class="si">₿</div>Portfolio Avg Buy Price</div></div><div id="avgBuyList"><div class="loading"><div class="spin"></div></div></div></div>
     </div>
   </div>
 
@@ -1019,7 +1017,7 @@ tr:hover td{background:var(--surface2)}
 
 <div class="toast-w" id="toastW"></div>
 <div class="offline-banner" id="offlineBanner">📡 You are offline — cached data shown</div>
-<div class="ptr-indicator" id="ptrInd">↓ Release to refresh</div>
+<div class="ptr-indicator" id="ptrInd" style="display:none">↓ Release to refresh</div>
 
 <script>
 const SBU='https://posemzalaztjiovzpija.supabase.co';
@@ -1152,11 +1150,24 @@ let dCurFilter='all';
 function dTab(cur,btn){dCurFilter=cur;document.querySelectorAll('.d-tab').forEach(b=>b.classList.remove('on'));btn.classList.add('on');loadDash();}
 async function loadDash(){
   if(!U)return;
+  // show loading state
+  ['d-bal','d-exp','d-sav','d-pnl'].forEach(id=>{const el=document.getElementById(id);if(el&&el.textContent==='$0.00')el.style.opacity='.5';});
   const{data:accs}=await db.from('accounts').select('*').eq('user_id',U.id);
-  let total=0,filtered=accs||[];
-  if(dCurFilter==='CRYPTO'){total=0;document.getElementById('d-bal-sub').textContent='Crypto portfolio';}
-  else if(dCurFilter!=='all'){filtered=(accs||[]).filter(a=>a.currency===dCurFilter);filtered.forEach(a=>total+=parseFloat(a.balance||0));const sym=dCurFilter==='BDT'?'৳':dCurFilter==='EUR'?'€':'$';document.getElementById('d-bal').textContent=sym+fN(total);document.getElementById('d-bal-sub').textContent=`${dCurFilter} accounts`;}
-  else{(accs||[]).forEach(a=>total+=parseFloat(a.balance||0));document.getElementById('d-bal').textContent='$'+fN(total);document.getElementById('d-bal-sub').textContent='All accounts';}
+  let total=0;
+  if(dCurFilter==='CRYPTO'){
+    // crypto handled below
+    document.getElementById('d-bal-sub').textContent='Crypto portfolio';
+  } else if(dCurFilter!=='all'){
+    const filtered=(accs||[]).filter(a=>a.currency===dCurFilter);
+    filtered.forEach(a=>total+=parseFloat(a.balance||0));
+    const sym=dCurFilter==='BDT'?'৳':dCurFilter==='EUR'?'€':'$';
+    document.getElementById('d-bal').textContent=sym+fN(total);
+    document.getElementById('d-bal-sub').textContent=dCurFilter+' accounts';
+  } else {
+    (accs||[]).forEach(a=>total+=parseFloat(a.balance||0));
+    document.getElementById('d-bal').textContent='$'+fN(total);
+    document.getElementById('d-bal-sub').textContent='All accounts';
+  }
   const now=new Date(),som=new Date(now.getFullYear(),now.getMonth(),1).toISOString().split('T')[0];
   const{data:txs}=await db.from('transactions').select('*').eq('user_id',U.id).gte('date',som);
   let exp=0,inc=0;txs?.forEach(t=>{if(t.type==='out')exp+=parseFloat(t.amount||0);else inc+=parseFloat(t.amount||0);});
@@ -1168,7 +1179,7 @@ async function loadDash(){
   if(dCurFilter==='CRYPTO'){document.getElementById('d-bal').textContent=(cinv>=0?'+ ':'')+'$'+fN(cinv);}
   const{data:rec}=await db.from('transactions').select('*,accounts(name)').eq('user_id',U.id).order('created_at',{ascending:false}).limit(8);
   const tb=document.getElementById('recentTx');
-  if(!rec?.length){tb.innerHTML='<tr><td colspan="5"><div class="empty"><div class="empty-ic">💸</div><div class="empty-tt">No transactions</div></div></td></tr>';return;}
+  if(!rec?.length){tb.innerHTML='<tr><td colspan="5"><div class="empty"><div style="font-size:56px;margin-bottom:12px">💸</div><div class="empty-tt" style="font-size:16px">No transactions yet</div><div class="empty-s" style="margin-top:6px">Tap + to add your first transaction</div></div></td></tr>';return;}
   tb.innerHTML=rec.map(t=>`<tr><td class="mono" style="color:var(--text2)">${fD(t.date)}</td><td>${t.description||'—'}</td><td><span style="font-size:12px">${t.category||'—'}</span></td><td style="color:var(--text2);font-size:12px">${t.accounts?.name||'—'}</td><td class="mono" style="font-weight:700;color:${t.type==='in'?'var(--green)':'var(--red)'}">${t.type==='in'?'+':`-`}$${fN(t.amount)}</td></tr>`).join('');
   loadDashCharts(txs||[]);
   loadWeeklySpend();
@@ -1519,10 +1530,10 @@ let ptrStart=0,ptrActive=false;
 document.addEventListener('touchstart',e=>{if(window.scrollY===0)ptrStart=e.touches[0].clientY;});
 document.addEventListener('touchmove',e=>{
   if(!ptrStart)return;const diff=e.touches[0].clientY-ptrStart;
-  if(diff>60&&window.scrollY===0&&!ptrActive){ptrActive=true;const ind=document.getElementById('ptrInd');if(ind)ind.classList.add('show');}
+  if(diff>60&&window.scrollY===0&&!ptrActive){ptrActive=true;const ind=document.getElementById('ptrInd');if(ind){ind.style.display='block';ind.textContent='↓ Release to refresh';}}
 });
 document.addEventListener('touchend',async()=>{
-  if(ptrActive){ptrActive=false;ptrStart=0;const ind=document.getElementById('ptrInd');if(ind)ind.classList.remove('show');await refreshMkt();loadDash();toast('Refreshed!','ok');}
+  if(ptrActive){ptrActive=false;ptrStart=0;const ind=document.getElementById('ptrInd');if(ind)ind.style.display='none';await refreshMkt();loadDash();toast('Refreshed!','ok');}
   ptrStart=0;
 });
 
