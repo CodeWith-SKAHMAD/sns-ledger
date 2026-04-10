@@ -15,14 +15,14 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 <style>
 :root{
-  --bg:#06070f;--bg2:#0d0e1a;--surface:#111320;--surface2:#181a2e;--surface3:#1e2038;
-  --border:#252845;--border2:#2e3258;
+  --bg:#000000;--bg2:#050508;--surface:#0a0a0f;--surface2:#0f1018;--surface3:#141520;
+  --border:#1a1c2e;--border2:#222438;
   --accent:#6366f1;--accent2:#06d6a0;--accent3:#f72585;
   --gold:#fbbf24;--blue:#38bdf8;--purple:#a855f7;
-  --text:#f1f2fc;--text2:#8b8db8;--text3:#555778;
+  --text:#f1f2fc;--text2:#8b8db8;--text3:#454668;
   --green:#06d6a0;--red:#f72585;--yellow:#fbbf24;
   --r:16px;--r2:12px;--r3:8px;
-  --sh:0 8px 40px rgba(0,0,0,.6);--sh2:0 4px 20px rgba(0,0,0,.4);
+  --sh:0 8px 40px rgba(0,0,0,.9);--sh2:0 4px 20px rgba(0,0,0,.7);
   --mono:'JetBrains Mono',monospace;
   --font:'Inter',sans-serif;
   --sb:260px;
@@ -360,12 +360,12 @@ tr:hover td{background:var(--surface2)}
 @keyframes tIn{from{opacity:0;transform:translateX(16px)}to{opacity:1;transform:translateX(0)}}
 
 /* ═══ MOBILE TOP BAR ═══ */
-.mob-tb{display:none;position:fixed;top:0;left:0;right:0;height:56px;background:var(--surface);border-bottom:1px solid var(--border);z-index:400;align-items:center;justify-content:space-between;padding:0 14px}
-.mob-logo{display:flex;align-items:center;gap:8px}
-.mob-logo img{width:28px;height:28px;border-radius:7px;object-fit:cover}
-.mob-logo span{font-size:15px;font-weight:800;background:linear-gradient(135deg,var(--accent),var(--accent2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
-.mob-acts{display:flex;gap:6px}
-.mob-btn{width:36px;height:36px;background:var(--surface2);border:1px solid var(--border);border-radius:9px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:16px;color:var(--text2);transition:all .2s}
+.mob-tb{display:none;position:fixed;top:0;left:0;right:0;height:54px;background:var(--surface);border-bottom:1px solid var(--border);z-index:400;align-items:center;justify-content:space-between;padding:0 10px}
+.mob-logo{display:flex;align-items:center;gap:7px;flex-shrink:0}
+.mob-logo img{width:26px;height:26px;border-radius:6px;object-fit:cover}
+.mob-logo span{font-size:14px;font-weight:800;background:linear-gradient(135deg,var(--accent),var(--accent2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.mob-acts{display:flex;gap:4px}
+.mob-btn{width:32px;height:32px;background:var(--surface2);border:1px solid var(--border);border-radius:8px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:15px;color:var(--text2);transition:all .2s}
 .mob-btn:hover{background:var(--border2)}
 .sb-ov{display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:299;backdrop-filter:blur(4px)}
 
@@ -394,7 +394,7 @@ tr:hover td{background:var(--surface2)}
   .mob-tb{display:flex}
   .main{margin-left:0;max-width:100vw}
   .topbar{display:none}
-  .page-body{padding:12px 14px 80px;padding-top:68px}
+  .page-body{padding:12px 14px 24px;padding-top:64px}
   .fab{bottom:76px}
   .fab-menu{bottom:140px}
   .g2{grid-template-columns:1fr}
@@ -449,10 +449,12 @@ tr:hover td{background:var(--surface2)}
 
 <!-- MOBILE TOP BAR -->
 <div class="mob-tb" id="mobTb">
-  <div class="mob-logo"><img src="logo.jpg" alt=""><span>SN's Ledger</span></div>
+  <div class="mob-logo" onclick="nav('dashboard')" style="cursor:pointer"><img src="logo.jpg" alt=""><span>SN's Ledger</span></div>
   <div class="mob-acts">
-    <div class="mob-btn" onclick="toggleTheme()" id="themeBtn">🌙</div>
+    <div class="mob-btn" id="themeBtn" onclick="toggleTheme()">🌙</div>
+    <div class="mob-btn" onclick="refreshMkt()" title="Refresh">🔄</div>
     <div class="mob-btn" onclick="nav('news')">📰</div>
+    <div class="mob-btn" style="color:#f72585" onclick="logout()">🚪</div>
     <div class="mob-btn" onclick="toggleSB()">☰</div>
   </div>
 </div>
@@ -472,9 +474,9 @@ tr:hover td{background:var(--surface2)}
 
 <!-- SIDEBAR -->
 <div class="sidebar" id="sidebar">
-  <div class="sb-head">
+  <div class="sb-head" onclick="nav('dashboard')" style="cursor:pointer">
     <img src="logo.jpg" alt="">
-    <div class="sb-head-text"><h2>SN's Ledger</h2><p>v4.0.0</p></div>
+    <div class="sb-head-text"><h2>SN's Ledger</h2><p>v4.0.2</p></div>
   </div>
   <div class="sb-user" onclick="nav('profile')">
     <div class="sb-av" id="sbAv">S</div>
@@ -482,36 +484,40 @@ tr:hover td{background:var(--surface2)}
   </div>
   <div style="flex:1;overflow-y:auto;padding-bottom:8px">
     <div class="sb-sec"><div class="sb-sec-label">Overview</div>
-      <div class="nv on" onclick="nav('dashboard')"><div class="nv-ic">🏠</div>Dashboard</div>
-      <div class="nv" onclick="nav('market')"><div class="nv-ic">📈</div>Live Market</div>
-      <div class="nv" onclick="nav('news')"><div class="nv-ic">📰</div>Crypto News</div>
+      <div class="nv on" onclick="nav('dashboard')"><div class="nv-ic"><img src="https://img.icons8.com/ios-filled/50/home.png" alt=""></div>Dashboard</div>
+      <div class="nv" onclick="nav('market')"><div class="nv-ic"><img src="https://img.icons8.com/ios-filled/50/combo-chart.png" alt=""></div>Live Market</div>
+      <div class="nv" onclick="nav('news')"><div class="nv-ic"><img src="https://img.icons8.com/ios-filled/50/news.png" alt=""></div>Crypto News</div>
     </div>
     <div class="sb-sec"><div class="sb-sec-label">Finance</div>
-      <div class="nv" onclick="nav('finance')"><div class="nv-ic">💰</div>Accounts</div>
-      <div class="nv" onclick="nav('budget')"><div class="nv-ic">🎯</div>Budget</div>
+      <div class="nv" onclick="nav('finance')"><div class="nv-ic"><img src="https://img.icons8.com/ios-filled/50/wallet.png" alt=""></div>Accounts</div>
+      <div class="nv" onclick="nav('budget')"><div class="nv-ic"><img src="https://img.icons8.com/ios-filled/50/budget.png" alt=""></div>Budget</div>
     </div>
     <div class="sb-sec"><div class="sb-sec-label">Crypto</div>
-      <div class="nv" onclick="nav('crypto')"><div class="nv-ic">₿</div>Portfolio</div>
-      <div class="nv" onclick="nav('watchlist')"><div class="nv-ic">⭐</div>Watchlist</div>
-      <div class="nv" onclick="nav('investment')"><div class="nv-ic">📊</div>Investments</div>
+      <div class="nv" onclick="nav('crypto')"><div class="nv-ic"><img src="https://img.icons8.com/ios-filled/50/bitcoin.png" alt=""></div>Portfolio</div>
+      <div class="nv" onclick="nav('watchlist')"><div class="nv-ic"><img src="https://img.icons8.com/ios-filled/50/star.png" alt=""></div>Watchlist</div>
+      <div class="nv" onclick="nav('investment')"><div class="nv-ic"><img src="https://img.icons8.com/ios-filled/50/increase.png" alt=""></div>Investments</div>
     </div>
     <div class="sb-sec"><div class="sb-sec-label">Tools</div>
-      <div class="nv" onclick="nav('tools')"><div class="nv-ic">🛠</div>Trading Tools</div>
-      <div class="nv" onclick="nav('converter')"><div class="nv-ic">🔄</div>Converter</div>
-      <div class="nv" onclick="nav('calc')"><div class="nv-ic">🧮</div>Calculator</div>
+      <div class="nv" onclick="nav('tools')"><div class="nv-ic"><img src="https://img.icons8.com/ios-filled/50/maintenance.png" alt=""></div>Trading Tools</div>
+      <div class="nv" onclick="nav('converter')"><div class="nv-ic"><img src="https://img.icons8.com/ios-filled/50/exchange.png" alt=""></div>Converter</div>
+      <div class="nv" onclick="nav('calc')"><div class="nv-ic"><img src="https://img.icons8.com/ios-filled/50/calculator.png" alt=""></div>Calculator</div>
+    </div>
+    <div class="sb-sec"><div class="sb-sec-label">Planning</div>
+      <div class="nv" onclick="nav('goals')"><div class="nv-ic"><img src="https://img.icons8.com/ios-filled/50/goal.png" alt=""></div>Savings Goals</div>
+      <div class="nv" onclick="nav('sltp')"><div class="nv-ic"><img src="https://img.icons8.com/ios-filled/50/alarm.png" alt=""></div>SL/TP Reminders</div>
     </div>
     <div class="sb-sec"><div class="sb-sec-label">More</div>
-      <div class="nv" onclick="nav('notes')"><div class="nv-ic">📝</div>My Notes</div>
-      <div class="nv" onclick="nav('profile')"><div class="nv-ic">👤</div>Profile</div>
-      <div class="nv" onclick="nav('review')"><div class="nv-ic">⭐</div>Rate App</div>
+      <div class="nv" onclick="nav('notes')"><div class="nv-ic"><img src="https://img.icons8.com/ios-filled/50/note.png" alt=""></div>My Notes</div>
+      <div class="nv" onclick="nav('profile')"><div class="nv-ic"><img src="https://img.icons8.com/ios-filled/50/user.png" alt=""></div>Profile</div>
+      <div class="nv" onclick="nav('review')"><div class="nv-ic"><img src="https://img.icons8.com/ios-filled/50/rating.png" alt=""></div>Rate App</div>
     </div>
   </div>
   <div class="sb-foot">
     <div class="sb-foot-row">
-      <button class="ib" onclick="toggleTheme()" id="sbThemeBtn">🌙</button>
-      <button class="ib" onclick="exportXLSX()">📤</button>
-      <button class="ib" onclick="backupJSON()">💾</button>
-      <button class="ib red" onclick="logout()">🚪</button>
+      <button class="ib" onclick="toggleTheme()" id="sbThemeBtn" title="Theme"><img src="https://img.icons8.com/ios-filled/50/moon-symbol.png" style="width:16px;height:16px;filter:invert(.6)"></button>
+      <button class="ib" onclick="exportXLSX()" title="Export"><img src="https://img.icons8.com/ios-filled/50/export.png" style="width:16px;height:16px;filter:invert(.6)"></button>
+      <button class="ib" onclick="backupJSON()" title="Backup"><img src="https://img.icons8.com/ios-filled/50/save.png" style="width:16px;height:16px;filter:invert(.6)"></button>
+      <button class="ib red" onclick="logout()" title="Logout"><img src="https://img.icons8.com/ios-filled/50/exit.png" style="width:16px;height:16px;filter:invert(.5) sepia(1) saturate(5) hue-rotate(300deg)"></button>
     </div>
   </div>
 </div>
@@ -538,16 +544,20 @@ tr:hover td{background:var(--surface2)}
         <div class="kpi"><div class="kpi-bar" style="background:linear-gradient(90deg,var(--accent),var(--purple))"></div><div class="kpi-label">Crypto P&L</div><div class="kpi-val" id="d-pnl">$0.00</div><div class="kpi-sub">Portfolio</div></div>
       </div>
       <div class="g2">
-        <div class="sec"><div class="sh"><div class="st"><div class="si">🥧</div>Expense Breakdown</div></div><div class="ch-box"><canvas id="expChart"></canvas></div></div>
-        <div class="sec"><div class="sh"><div class="st"><div class="si">📊</div>Monthly Overview</div></div><div class="ch-box"><canvas id="mnthChart"></canvas></div></div>
+        <div class="sec"><div class="sh"><div class="st"><div class="si"><img src="https://img.icons8.com/ios-filled/50/pie-chart.png" style="width:16px;height:16px;filter:invert(.6)"></div>Expense Breakdown</div></div><div class="ch-box"><canvas id="expChart"></canvas></div></div>
+        <div class="sec"><div class="sh"><div class="st"><div class="si"><img src="https://img.icons8.com/ios-filled/50/bar-chart.png" style="width:16px;height:16px;filter:invert(.6)"></div>Monthly Overview</div></div><div class="ch-box"><canvas id="mnthChart"></canvas></div></div>
+      </div>
+      <div class="g2">
+        <div class="sec"><div class="sh"><div class="st"><div class="si"><img src="https://img.icons8.com/ios-filled/50/cost.png" style="width:16px;height:16px;filter:invert(.6)"></div>This Week's Spending</div></div><div class="week-bars" id="weekBars"></div></div>
+        <div class="sec"><div class="sh"><div class="st"><div class="si"><img src="https://img.icons8.com/ios-filled/50/increase.png" style="width:16px;height:16px;filter:invert(.6)"></div>Net Worth Over Time</div></div><div class="ch-box" style="height:140px"><canvas id="nwChart"></canvas></div></div>
       </div>
       <!-- Recent news on dashboard -->
       <div class="sec">
-        <div class="sh"><div class="st"><div class="si">📰</div>Latest Crypto News</div><button class="btn sm" onclick="nav('news')">All News →</button></div>
+        <div class="sh"><div class="st"><div class="si"><img src="https://img.icons8.com/ios-filled/50/news.png" style="width:16px;height:16px;filter:invert(.6)"></div>Latest Crypto News</div><button class="btn sm" onclick="nav('news')">All News →</button></div>
         <div id="dashNews"><div class="loading"><div class="spin"></div></div></div>
       </div>
       <div class="sec">
-        <div class="sh"><div class="st"><div class="si">🕐</div>Recent Transactions</div><button class="btn sm" onclick="nav('finance')">View All →</button></div>
+        <div class="sh"><div class="st"><div class="si"><img src="https://img.icons8.com/ios-filled/50/clock.png" style="width:16px;height:16px;filter:invert(.6)"></div>Recent Transactions</div><button class="btn sm" onclick="nav('finance')">View All →</button></div>
         <div class="tw"><table><thead><tr><th>Date</th><th>Description</th><th>Category</th><th>Account</th><th>Amount</th></tr></thead><tbody id="recentTx"><tr><td colspan="5"><div class="loading"><div class="spin"></div></div></td></tr></tbody></table></div>
       </div>
     </div>
@@ -557,8 +567,8 @@ tr:hover td{background:var(--surface2)}
   <div class="pg" id="pg-market">
     <div class="topbar"><div class="tb-left"><div class="tb-title">Live <span class="accent">Market</span></div></div><button class="btn pri sm" onclick="refreshMkt()">🔄 Refresh</button></div>
     <div class="page-body">
-      <div class="sec" style="margin-bottom:14px"><div class="sh"><div class="st"><div class="si">🪙</div>Crypto — Click for chart & alerts</div></div><div class="mg" id="cryptoMg"><div class="loading"><div class="spin"></div></div></div></div>
-      <div class="sec"><div class="sh"><div class="st"><div class="si">📊</div>Stocks & ETFs</div></div><div class="mg" id="stockMg"><div class="loading"><div class="spin"></div></div></div></div>
+      <div class="sec" style="margin-bottom:14px"><div class="sh"><div class="st"><div class="si"><img src="https://img.icons8.com/ios-filled/50/coin.png" style="width:16px;height:16px;filter:invert(.6)"></div>Crypto — Click for chart & alerts</div></div><div class="mg" id="cryptoMg"><div class="loading"><div class="spin"></div></div></div></div>
+      <div class="sec"><div class="sh"><div class="st"><div class="si"><img src="https://img.icons8.com/ios-filled/50/bar-chart.png" style="width:16px;height:16px;filter:invert(.6)"></div>Stocks & ETFs</div></div><div class="mg" id="stockMg"><div class="loading"><div class="spin"></div></div></div></div>
     </div>
   </div>
 
@@ -575,7 +585,7 @@ tr:hover td{background:var(--surface2)}
         <div id="watcherPosts"><div class="loading"><div class="spin"></div></div></div>
       </div>
       <div class="sec">
-        <div class="sh"><div class="st"><div class="si">📰</div>Top Crypto News</div></div>
+        <div class="sh"><div class="st"><div class="si"><img src="https://img.icons8.com/ios-filled/50/news.png" style="width:16px;height:16px;filter:invert(.6)"></div>Top Crypto News</div></div>
         <div class="news-grid" id="newsGrid"><div class="loading"><div class="spin"></div></div></div>
       </div>
     </div>
@@ -585,11 +595,15 @@ tr:hover td{background:var(--surface2)}
   <div class="pg" id="pg-finance">
     <div class="topbar"><div class="tb-left"><div class="tb-title">Finance <span class="accent">Accounts</span></div></div><div class="tb-right"><button class="btn pri sm" onclick="openM('accModal')">＋ New Account</button></div></div>
     <div class="page-body">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px">
+        <div style="font-size:16px;font-weight:700">My Accounts</div>
+        <button class="btn pri sm" onclick="openM('accModal')">＋ New Account</button>
+      </div>
       <div class="acc-grid" id="accGrid"><div class="loading"><div class="spin"></div></div></div>
       <div id="accTxSec" style="display:none">
         <div class="sec">
           <div class="sh">
-            <div class="st"><div class="si">💳</div><span id="accTxTt">Transactions</span></div>
+            <div class="st"><div class="si"><img src="https://img.icons8.com/ios-filled/50/credit-card.png" style="width:16px;height:16px;filter:invert(.6)"></div><span id="accTxTt">Transactions</span></div>
             <div style="display:flex;gap:7px;flex-wrap:wrap">
               <button class="btn pri sm" onclick="openM('txModal','in')">＋ Cash In</button>
               <button class="btn danger sm" onclick="openM('txModal','out')">− Cash Out</button>
@@ -607,7 +621,7 @@ tr:hover td{background:var(--surface2)}
   <div class="pg" id="pg-budget">
     <div class="topbar"><div class="tb-left"><div class="tb-title">Budget <span class="accent">Control</span></div></div><button class="btn pri sm" onclick="openM('budgetModal')">＋ Set Budget</button></div>
     <div class="page-body">
-      <div class="sec"><div class="sh"><div class="st"><div class="si">🎯</div>This Month</div></div><div id="budgetList"><div class="loading"><div class="spin"></div></div></div></div>
+      <div class="sec"><div class="sh"><div class="st"><div class="si"><img src="https://img.icons8.com/ios-filled/50/target.png" style="width:16px;height:16px;filter:invert(.6)"></div>This Month</div></div><div id="budgetList"><div class="loading"><div class="spin"></div></div></div></div>
     </div>
   </div>
 
@@ -621,11 +635,20 @@ tr:hover td{background:var(--surface2)}
         <div class="kpi"><div class="kpi-bar" style="background:var(--green)"></div><div class="kpi-label">P&L</div><div class="kpi-val g" id="c-pnl">$0</div></div>
         <div class="kpi"><div class="kpi-bar" style="background:var(--accent2)"></div><div class="kpi-label">P&L %</div><div class="kpi-val g" id="c-pct">0%</div></div>
       </div>
-      <div class="sec" style="margin-bottom:14px">
-        <div class="sh"><div class="st"><div class="si">📈</div>Performance</div><div class="ch-tabs"><button class="ct on" onclick="ctab(this,'7d')">7D</button><button class="ct" onclick="ctab(this,'30d')">1M</button><button class="ct" onclick="ctab(this,'all')">All</button></div></div>
-        <div class="ch-box"><canvas id="cryptoChart"></canvas></div>
+      <div class="g2" style="margin-bottom:14px">
+        <div class="sec">
+          <div class="sh"><div class="st"><div class="si"><img src="https://img.icons8.com/ios-filled/50/increase.png" style="width:16px;height:16px;filter:invert(.6)"></div>Performance</div><div class="ch-tabs"><button class="ct on" onclick="ctab(this,'7d')">7D</button><button class="ct" onclick="ctab(this,'30d')">1M</button><button class="ct" onclick="ctab(this,'all')">All</button></div></div>
+          <div class="ch-box"><canvas id="cryptoChart"></canvas></div>
+        </div>
+        <div class="sec">
+          <div class="sh"><div class="st"><div class="si"><img src="https://img.icons8.com/ios-filled/50/pie-chart.png" style="width:16px;height:16px;filter:invert(.6)"></div>Portfolio Allocation</div></div>
+          <div class="port-pie-wrap">
+            <div class="ch-box" style="height:180px"><canvas id="portPieChart"></canvas></div>
+            <div class="port-legend" id="portLegend"></div>
+          </div>
+        </div>
       </div>
-      <div class="sec"><div class="sh"><div class="st"><div class="si">₿</div>Trade Log</div></div><div class="tw"><table><thead><tr><th>Date</th><th>Coin</th><th>Type</th><th>Qty</th><th>Price</th><th>Total</th><th>Exchange</th><th>Note</th><th>Unrealized P&L</th><th></th></tr></thead><tbody id="cryptoTb"><tr><td colspan="10"><div class="loading"><div class="spin"></div></div></td></tr></tbody></table></div></div>
+      <div class="sec"><div class="sh"><div class="st"><div class="si"><img src="https://img.icons8.com/ios-filled/50/bitcoin.png" style="width:16px;height:16px;filter:invert(.6)"></div>Trade Log</div></div><div class="tw"><table><thead><tr><th>Date</th><th>Coin</th><th>Type</th><th>Qty</th><th>Price</th><th>Total</th><th>Exchange</th><th>Note</th><th>Unrealized P&L</th><th></th></tr></thead><tbody id="cryptoTb"><tr><td colspan="10"><div class="loading"><div class="spin"></div></div></td></tr></tbody></table></div></div>
     </div>
   </div>
 
@@ -644,8 +667,8 @@ tr:hover td{background:var(--surface2)}
         <div class="kpi"><div class="kpi-bar" style="background:var(--accent)"></div><div class="kpi-label">Current Value</div><div class="kpi-val" id="i-cur">$0</div></div>
         <div class="kpi"><div class="kpi-bar" style="background:var(--green)"></div><div class="kpi-label">Total Return</div><div class="kpi-val g" id="i-ret">$0</div></div>
       </div>
-      <div class="sec" style="margin-bottom:14px"><div class="sh"><div class="st"><div class="si">📈</div>Growth</div></div><div class="ch-box"><canvas id="invChart"></canvas></div></div>
-      <div class="sec"><div class="sh"><div class="st"><div class="si">📋</div>Investments</div></div><div id="invList"><div class="loading"><div class="spin"></div></div></div></div>
+      <div class="sec" style="margin-bottom:14px"><div class="sh"><div class="st"><div class="si"><img src="https://img.icons8.com/ios-filled/50/increase.png" style="width:16px;height:16px;filter:invert(.6)"></div>Growth</div></div><div class="ch-box"><canvas id="invChart"></canvas></div></div>
+      <div class="sec"><div class="sh"><div class="st"><div class="si"><img src="https://img.icons8.com/ios-filled/50/list.png" style="width:16px;height:16px;filter:invert(.6)"></div>Investments</div></div><div id="invList"><div class="loading"><div class="spin"></div></div></div></div>
     </div>
   </div>
 
@@ -654,7 +677,7 @@ tr:hover td{background:var(--surface2)}
     <div class="topbar"><div class="tb-left"><div class="tb-title">Trading <span class="accent">Tools</span></div></div></div>
     <div class="page-body">
       <div class="sec" style="margin-bottom:16px">
-        <div class="sh"><div class="st"><div class="si">🤖</div>TA Signals</div>
+        <div class="sh"><div class="st"><div class="si"><img src="https://img.icons8.com/ios-filled/50/bot.png" style="width:16px;height:16px;filter:invert(.6)"></div>TA Signals</div>
           <div style="display:flex;gap:7px;align-items:center;flex-wrap:wrap">
             <div style="display:flex;gap:4px" id="tfBtns">
               <button class="ct on" onclick="setTF('30m',this)">30m</button>
@@ -692,7 +715,7 @@ tr:hover td{background:var(--surface2)}
     <div class="topbar"><div class="tb-left"><div class="tb-title">🔄 <span class="accent">Converter</span></div></div></div>
     <div class="page-body">
       <div class="g2">
-        <div class="sec"><div class="sh"><div class="st"><div class="si">🪙</div>Crypto</div></div>
+        <div class="sec"><div class="sh"><div class="st"><div class="si"><img src="https://img.icons8.com/ios-filled/50/coin.png" style="width:16px;height:16px;filter:invert(.6)"></div>Crypto</div></div>
           <div class="fg"><label class="fl">Amount</label><input class="fi" type="number" id="cc-a" value="1" oninput="convCrypto()"></div>
           <div class="cv-pair">
             <div class="fg" style="margin:0"><label class="fl">From</label><select class="fi fi-select" id="cc-f" onchange="convCrypto()"><option value="bitcoin">BTC</option><option value="ethereum">ETH</option><option value="binancecoin">BNB</option><option value="solana">SOL</option><option value="ripple">XRP</option><option value="dogecoin">DOGE</option></select></div>
@@ -806,10 +829,34 @@ tr:hover td{background:var(--surface2)}
           </div>
         </div>
         <div class="sec">
-          <div class="sh"><div class="st"><div class="si">💬</div>Recent Reviews</div></div>
+          <div class="sh"><div class="st"><div class="si"><img src="https://img.icons8.com/ios-filled/50/speech-bubble.png" style="width:16px;height:16px;filter:invert(.6)"></div>Recent Reviews</div></div>
           <div id="rvList"><div class="loading"><div class="spin"></div></div></div>
         </div>
       </div>
+    </div>
+  </div>
+
+
+  <!-- GOALS -->
+  <div class="pg" id="pg-goals">
+    <div class="topbar"><div class="tb-left"><div class="tb-title">Savings <span class="accent">Goals</span></div></div><button class="btn pri sm" onclick="openM('goalModal')">＋ Add Goal</button></div>
+    <div class="page-body">
+      <div class="g3" id="goalKpis">
+        <div class="kpi"><div class="kpi-bar" style="background:linear-gradient(90deg,var(--accent),var(--purple))"></div><div class="kpi-label">Total Goals</div><div class="kpi-val b" id="g-total">0</div></div>
+        <div class="kpi"><div class="kpi-bar" style="background:var(--green)"></div><div class="kpi-label">Completed</div><div class="kpi-val g" id="g-done">0</div></div>
+        <div class="kpi"><div class="kpi-bar" style="background:var(--yellow)"></div><div class="kpi-label">In Progress</div><div class="kpi-val y" id="g-prog">0</div></div>
+      </div>
+      <div class="sec"><div class="sh"><div class="st"><div class="si"><img src="https://img.icons8.com/ios-filled/50/goal.png" style="width:16px;height:16px;filter:invert(.6)"></div>My Goals</div></div><div id="goalList"><div class="loading"><div class="spin"></div></div></div></div>
+    </div>
+  </div>
+
+  <!-- SL/TP REMINDERS -->
+  <div class="pg" id="pg-sltp">
+    <div class="topbar"><div class="tb-left"><div class="tb-title">SL/TP <span class="accent">Reminders</span></div></div><button class="btn pri sm" onclick="openM('sltpModal')">＋ Add Reminder</button></div>
+    <div class="page-body">
+      <div style="background:rgba(251,191,36,.07);border:1px solid rgba(251,191,36,.2);border-radius:10px;padding:12px 16px;margin-bottom:16px;font-size:12px;color:var(--yellow)">🔔 Price alerts check every 30 seconds while app is open. Enable browser notifications for best experience.</div>
+      <div class="sec"><div class="sh"><div class="st"><div class="si"><img src="https://img.icons8.com/ios-filled/50/alarm.png" style="width:16px;height:16px;filter:invert(.6)"></div>Active Reminders</div><button class="btn sm" onclick="checkSLTP()">🔄 Check Now</button></div><div class="sltp-list" id="sltpList"><div class="empty"><div class="empty-ic">🔔</div><div class="empty-tt">No reminders</div><div class="empty-s">Add SL/TP for your positions</div></div></div></div>
+      <div class="sec"><div class="sh"><div class="st"><div class="si"><img src="https://img.icons8.com/ios-filled/50/bitcoin.png" style="width:16px;height:16px;filter:invert(.6)"></div>Portfolio Avg Buy Price</div></div><div id="avgBuyList"><div class="loading"><div class="spin"></div></div></div></div>
     </div>
   </div>
 
@@ -939,7 +986,40 @@ tr:hover td{background:var(--surface2)}
   </div>
 </div></div>
 
+
+<div class="ov" id="goalModal"><div class="modal">
+  <div class="mh"><div class="mt">🎯 New Savings Goal</div><div class="mx" onclick="closeM('goalModal')">✕</div></div>
+  <div class="mb">
+    <div class="fg"><label class="fl">Goal Name</label><input class="fi" type="text" id="gl-nm" placeholder="e.g. Emergency Fund, New Laptop..."></div>
+    <div class="fr">
+      <div class="fg"><label class="fl">Target Amount ($)</label><input class="fi" type="number" id="gl-tg" placeholder="0.00"></div>
+      <div class="fg"><label class="fl">Current Amount ($)</label><input class="fi" type="number" id="gl-cu" placeholder="0.00"></div>
+    </div>
+    <div class="fr">
+      <div class="fg"><label class="fl">Deadline</label><input class="fi" type="date" id="gl-dl"></div>
+      <div class="fg"><label class="fl">Icon (emoji)</label><input class="fi" type="text" id="gl-ic" placeholder="🏠 💻 ✈️ 🚗" maxlength="2"></div>
+    </div>
+  </div>
+  <div class="mf"><button class="btn" onclick="closeM('goalModal')">Cancel</button><button class="btn pri" onclick="saveGoal()">Save Goal</button></div>
+</div></div>
+
+<div class="ov" id="sltpModal"><div class="modal">
+  <div class="mh"><div class="mt">🔔 Add SL/TP Reminder</div><div class="mx" onclick="closeM('sltpModal')">✕</div></div>
+  <div class="mb">
+    <div class="fg"><label class="fl">Coin Symbol</label><input class="fi" type="text" id="st-cn" placeholder="BTC, ETH, SOL..." list="coinDL2"><datalist id="coinDL2"><option value="BTC"><option value="ETH"><option value="BNB"><option value="SOL"><option value="XRP"><option value="DOGE"><option value="ADA"><option value="AVAX"><option value="WIF"><option value="PEPE"><option value="BONK"></datalist></div>
+    <div class="fg"><label class="fl">Entry Price ($)</label><input class="fi" type="number" id="st-en" placeholder="0.00"></div>
+    <div class="fr">
+      <div class="fg"><label class="fl">Take Profit ($)</label><input class="fi" type="number" id="st-tp" placeholder="0.00" style="border-color:rgba(6,214,160,.3)"></div>
+      <div class="fg"><label class="fl">Stop Loss ($)</label><input class="fi" type="number" id="st-sl" placeholder="0.00" style="border-color:rgba(247,37,133,.3)"></div>
+    </div>
+    <div class="fg"><label class="fl">Note</label><input class="fi" type="text" id="st-nt" placeholder="Optional note..."></div>
+  </div>
+  <div class="mf"><button class="btn" onclick="closeM('sltpModal')">Cancel</button><button class="btn pri" onclick="saveSLTP()">Set Reminder</button></div>
+</div></div>
+
 <div class="toast-w" id="toastW"></div>
+<div class="offline-banner" id="offlineBanner">📡 You are offline — cached data shown</div>
+<div class="ptr-indicator" id="ptrInd">↓ Release to refresh</div>
 
 <script>
 const SBU='https://posemzalaztjiovzpija.supabase.co';
@@ -957,7 +1037,8 @@ function setUI(){const n=U?.user_metadata?.full_name||U?.email?.split('@')[0]||'
 function showApp(){document.getElementById('authPage').style.display='none';document.getElementById('app').classList.add('on');document.getElementById('fabBtn').style.display='flex';initApp();}
 
 // ── INIT ──
-async function initApp(){const td=new Date().toISOString().split('T')[0];['tx-dt','cr-dt','iv-dt'].forEach(id=>{const el=document.getElementById(id);if(el)el.value=td;});await loadMkt();loadDash();loadAccounts();loadNews();}
+async function initApp(){
+  requestNotifPerm();const td=new Date().toISOString().split('T')[0];['tx-dt','cr-dt','iv-dt'].forEach(id=>{const el=document.getElementById(id);if(el)el.value=td;});await loadMkt();loadDash();loadAccounts();loadNews();}
 
 // ── NAV ──
 function nav(pg){
@@ -984,52 +1065,67 @@ async function refreshMkt(){await loadMkt();updateTicker();toast('Prices updated
 
 // ── NEWS ──
 async function loadNews(){
-  // Load Watcher Guru posts via Nitter RSS
   const watcherDiv=document.getElementById('watcherPosts');
   const dashNewsDiv=document.getElementById('dashNews');
-  try{
-    // Use allorigins to bypass CORS for RSS
-    const rssUrl=encodeURIComponent('https://nitter.poast.org/WatcherGuru/rss');
-    const r=await fetch(`https://api.allorigins.win/get?url=${rssUrl}`);
-    const d=await r.json();
-    const parser=new DOMParser();
-    const xml=parser.parseFromString(d.contents,'text/xml');
-    const items=[...xml.querySelectorAll('item')].slice(0,5);
-    if(items.length&&watcherDiv){
-      watcherDiv.innerHTML=items.map(i=>{
-        const title=i.querySelector('title')?.textContent||'';
-        const link=i.querySelector('link')?.textContent||'#';
-        const pubDate=i.querySelector('pubDate')?.textContent||'';
-        const date=pubDate?new Date(pubDate).toLocaleDateString('en-GB',{day:'2-digit',month:'short',hour:'2-digit',minute:'2-digit'}):'';
-        return`<div class="watcher-post" onclick="window.open('${link}','_blank')"><div class="watcher-post-text">${title}</div><div class="watcher-post-time">🕐 ${date}</div></div>`;
-      }).join('');
-    }
-  }catch(e){if(watcherDiv)watcherDiv.innerHTML=`<div class="watcher-post"><div class="watcher-post-text">🔗 Follow <strong>@WatcherGuru</strong> on X for live alerts</div><a href="https://x.com/WatcherGuru" target="_blank" class="btn pri sm" style="margin-top:8px">Open Twitter/X →</a></div>`;}
-  // CoinGecko News
-  try{
-    const r2=await fetch('https://api.coingecko.com/api/v3/news?per_page=20');
-    const data=r2.ok?await r2.json():null;
-    const articles=data?.data||[];
-    const newsHtml=articles.slice(0,15).map(a=>`
-      <div class="news-card" onclick="window.open('${a.url}','_blank')">
-        <img class="news-img" src="${a.thumb_2x||a.thumb||''}" onerror="this.style.display='none'" loading="lazy">
-        <div class="news-body">
-          <div class="news-title">${a.title||'—'}</div>
-          <div class="news-meta"><span class="news-src">${a.news_site||'CoinGecko'}</span><span>${a.created_at?new Date(a.created_at*1000).toLocaleDateString('en-GB',{day:'2-digit',month:'short'}):'—'}</span></div>
-        </div>
-      </div>`).join('');
-    const newsGrid=document.getElementById('newsGrid');
-    if(newsGrid)newsGrid.innerHTML=newsHtml||'<div class="empty"><div class="empty-ic">📰</div><div class="empty-tt">No news found</div></div>';
-    // Dashboard news (3 items)
-    if(dashNewsDiv)dashNewsDiv.innerHTML=articles.slice(0,3).map(a=>`
-      <div class="news-card" onclick="window.open('${a.url}','_blank')">
-        <img class="news-img" src="${a.thumb||''}" onerror="this.style.display='none'" loading="lazy">
-        <div class="news-body"><div class="news-title">${a.title||'—'}</div><div class="news-meta"><span class="news-src">${a.news_site||'News'}</span></div></div>
-      </div>`).join('');
-  }catch(e){
-    // Fallback to CryptoCompare
-    try{const r3=await fetch('https://min-api.cryptocompare.com/data/v2/news/?lang=EN&api_key=&limit=15');const d3=await r3.json();const articles=(d3.Data||[]).slice(0,15);const newsGrid=document.getElementById('newsGrid');if(newsGrid)newsGrid.innerHTML=articles.map(a=>`<div class="news-card" onclick="window.open('${a.url}','_blank')"><img class="news-img" src="${a.imageurl||''}" onerror="this.style.display='none'" loading="lazy"><div class="news-body"><div class="news-title">${a.title||'—'}</div><div class="news-meta"><span class="news-src">${a.source||'News'}</span></div></div></div>`).join('');}catch(e2){console.log(e2);}
+  const newsGrid=document.getElementById('newsGrid');
+  
+  // Watcher Guru - try multiple Nitter instances
+  const nitterInstances=['https://nitter.privacyredirect.com','https://nitter.poast.org','https://nitter.cz'];
+  let watcherLoaded=false;
+  for(const inst of nitterInstances){
+    try{
+      const rssUrl=encodeURIComponent(`${inst}/WatcherGuru/rss`);
+      const r=await fetch(`https://api.allorigins.win/get?url=${rssUrl}`,{signal:AbortSignal.timeout(5000)});
+      if(!r.ok)continue;
+      const d=await r.json();
+      if(!d.contents)continue;
+      const parser=new DOMParser();
+      const xml=parser.parseFromString(d.contents,'text/xml');
+      const items=[...xml.querySelectorAll('item')].slice(0,6);
+      if(items.length&&watcherDiv){
+        watcherDiv.innerHTML=items.map(i=>{
+          const title=(i.querySelector('title')?.textContent||'').replace(/<[^>]*>/g,'');
+          const link=i.querySelector('link')?.textContent||'https://x.com/WatcherGuru';
+          const pubDate=i.querySelector('pubDate')?.textContent||'';
+          const date=pubDate?new Date(pubDate).toLocaleDateString('en-GB',{day:'2-digit',month:'short',hour:'2-digit',minute:'2-digit'}):'';
+          return`<div class="watcher-post" onclick="window.open('${link}','_blank')" style="cursor:pointer"><div class="watcher-post-text">${title}</div><div class="watcher-post-time">🕐 ${date} · click to read</div></div>`;
+        }).join('');
+        watcherLoaded=true;break;
+      }
+    }catch(e){continue;}
   }
+  if(!watcherLoaded&&watcherDiv){
+    watcherDiv.innerHTML=`<div class="watcher-post"><div style="font-size:13px;margin-bottom:10px">📡 Live feed unavailable — follow directly on X for real-time alerts</div><a href="https://x.com/WatcherGuru" target="_blank" class="btn pri sm" style="display:inline-flex">Open @WatcherGuru on X →</a></div>`;
+  }
+  
+  // News - try CryptoCompare first (most reliable), then CoinGecko
+  let articles=[];
+  try{
+    const r=await fetch('https://min-api.cryptocompare.com/data/v2/news/?lang=EN&limit=20&sortOrder=popular');
+    const d=await r.json();
+    if(d.Data&&d.Data.length){
+      articles=d.Data.map(a=>({title:a.title,url:a.url,img:a.imageurl,src:a.source_info?.name||a.source,date:new Date(a.published_on*1000).toLocaleDateString('en-GB',{day:'2-digit',month:'short'})}));
+    }
+  }catch(e){}
+  
+  if(!articles.length){
+    try{
+      const r=await fetch('https://api.coingecko.com/api/v3/news?per_page=20');
+      if(r.ok){const d=await r.json();articles=(d.data||[]).map(a=>({title:a.title,url:a.url,img:a.thumb_2x||a.thumb,src:a.news_site,date:a.created_at?new Date(a.created_at*1000).toLocaleDateString('en-GB',{day:'2-digit',month:'short'}):''}) );}
+    }catch(e){}
+  }
+  
+  const makeCard=(a,big=false)=>`
+    <div class="news-card" onclick="window.open('${a.url}','_blank')" style="cursor:pointer">
+      ${a.img?`<img class="news-img" src="${a.img}" onerror="this.style.display='none'" loading="lazy">`:''}
+      <div class="news-body">
+        <div class="news-title">${a.title||'—'}</div>
+        <div class="news-meta"><span class="news-src">${a.src||'Crypto News'}</span><span>${a.date||''}</span></div>
+      </div>
+    </div>`;
+  
+  if(newsGrid)newsGrid.innerHTML=articles.length?articles.slice(0,20).map(a=>makeCard(a)).join(''):'<div class="empty"><div class="empty-ic">📰</div><div class="empty-tt">No news found</div><div class="empty-s">Check your connection</div></div>';
+  if(dashNewsDiv)dashNewsDiv.innerHTML=articles.slice(0,4).map(a=>makeCard(a)).join('');
 }
 
 // ── COIN MODAL ──
@@ -1075,6 +1171,8 @@ async function loadDash(){
   if(!rec?.length){tb.innerHTML='<tr><td colspan="5"><div class="empty"><div class="empty-ic">💸</div><div class="empty-tt">No transactions</div></div></td></tr>';return;}
   tb.innerHTML=rec.map(t=>`<tr><td class="mono" style="color:var(--text2)">${fD(t.date)}</td><td>${t.description||'—'}</td><td><span style="font-size:12px">${t.category||'—'}</span></td><td style="color:var(--text2);font-size:12px">${t.accounts?.name||'—'}</td><td class="mono" style="font-weight:700;color:${t.type==='in'?'var(--green)':'var(--red)'}">${t.type==='in'?'+':`-`}$${fN(t.amount)}</td></tr>`).join('');
   loadDashCharts(txs||[]);
+  loadWeeklySpend();
+  loadNetWorthChart();
 }
 function loadDashCharts(txs){const cm={};txs.filter(t=>t.type==='out').forEach(t=>{cm[t.category]=(cm[t.category]||0)+parseFloat(t.amount);});const cats=Object.keys(cm),vals=Object.values(cm);const clrs=['#6366f1','#06d6a0','#f72585','#fbbf24','#38bdf8','#a855f7','#ec4899','#14b8a6'];if(chts.exp)chts.exp.destroy();const c1=document.getElementById('expChart')?.getContext('2d');if(c1)chts.exp=new Chart(c1,{type:'doughnut',data:{labels:cats,datasets:[{data:vals,backgroundColor:clrs,borderWidth:0,hoverOffset:6}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'right',labels:{color:'#8b8db8',font:{size:10},boxWidth:10}}}}});const mnths=['J','F','M','A','M','J','J','A','S','O','N','D'];const inc=new Array(12).fill(0),exp=new Array(12).fill(0);txs.forEach(t=>{const m=new Date(t.date).getMonth();if(t.type==='in')inc[m]+=parseFloat(t.amount);else exp[m]+=parseFloat(t.amount);});if(chts.mnth)chts.mnth.destroy();const c2=document.getElementById('mnthChart')?.getContext('2d');if(c2)chts.mnth=new Chart(c2,{type:'bar',data:{labels:mnths,datasets:[{label:'Income',data:inc,backgroundColor:'rgba(6,214,160,.65)',borderRadius:6},{label:'Expense',data:exp,backgroundColor:'rgba(247,37,133,.65)',borderRadius:6}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{labels:{color:'#8b8db8',font:{size:10},boxWidth:10}}},scales:{x:{ticks:{color:'#8b8db8',font:{size:10}},grid:{color:'rgba(255,255,255,.04)'}},y:{ticks:{color:'#8b8db8',font:{size:10}},grid:{color:'rgba(255,255,255,.04)'}}}}});}
 
@@ -1100,7 +1198,9 @@ async function saveBudget(){const ca=document.getElementById('bg-ca').value,li=p
 const c2id={BTC:'bitcoin',ETH:'ethereum',BNB:'binancecoin',SOL:'solana',XRP:'ripple',DOGE:'dogecoin',ADA:'cardano',AVAX:'avalanche-2',LINK:'chainlink',DOT:'polkadot'};
 async function loadCryptoPg(){await loadMkt();const{data:trades}=await db.from('crypto_trades').select('*').eq('user_id',U.id).order('created_at',{ascending:false});let inv=0,cv=0;const h={};trades?.forEach(t=>{const tot=parseFloat(t.amount)*parseFloat(t.price);if(t.trade_type==='buy'){inv+=tot;h[t.coin?.toUpperCase()]=(h[t.coin?.toUpperCase()]||0)+parseFloat(t.amount);}else if(t.trade_type==='sell'){h[t.coin?.toUpperCase()]=(h[t.coin?.toUpperCase()]||0)-parseFloat(t.amount);}});Object.entries(h).forEach(([coin,qty])=>{const id=c2id[coin];if(id&&mkt[id])cv+=qty*mkt[id].usd;else cv+=qty*(trades?.find(t=>t.coin?.toUpperCase()===coin)?.price||0);});
 const pnl=cv-inv,pct=inv>0?((pnl/inv)*100).toFixed(2):0;['c-inv','c-cur'].forEach((i,x)=>{document.getElementById(i).textContent='$'+fN(x===0?inv:cv);});['c-pnl','c-pct'].forEach((i,x)=>{const el=document.getElementById(i);const v=x===0?pnl:pct;el.textContent=(v>=0?'+':'')+(x===0?'$'+fN(Math.abs(v)):v+'%');el.className='kpi-val '+(v>=0?'g':'r');});
-const tb=document.getElementById('cryptoTb');if(!trades?.length){tb.innerHTML='<tr><td colspan="10"><div class="empty"><div class="empty-ic">₿</div><div class="empty-tt">No trades</div></div></td></tr>';loadCryptoChart([]);return;}tb.innerHTML=trades.map(t=>{const tot=parseFloat(t.amount)*parseFloat(t.price);const id=c2id[t.coin?.toUpperCase()];const cp=id&&mkt[id]?mkt[id].usd:parseFloat(t.price);const up=(cp-parseFloat(t.price))*parseFloat(t.amount);return`<tr><td class="mono" style="color:var(--text2)">${fD(t.date)}</td><td class="mono" style="font-weight:800;color:var(--accent)">${t.coin?.toUpperCase()}</td><td><span class="badge ${t.trade_type}">${t.trade_type?.toUpperCase()}</span></td><td class="mono">${t.amount}</td><td class="mono">$${fN(t.price)}</td><td class="mono">$${fN(tot)}</td><td style="font-size:11px;color:var(--text2)">${t.exchange||'—'}</td><td style="font-size:11px;max-width:100px;overflow:hidden;text-overflow:ellipsis">${t.note||'—'}</td><td class="mono" style="font-weight:700;color:${up>=0?'var(--green)':'var(--red)'}">${up>=0?'+':''}$${fN(up)}</td><td><button class="del" onclick="delCrypto('${t.id}')">🗑</button></td></tr>`;}).join('');loadCryptoChart(trades);}
+const tb=document.getElementById('cryptoTb');if(!trades?.length){tb.innerHTML='<tr><td colspan="10"><div class="empty"><div class="empty-ic">₿</div><div class="empty-tt">No trades</div></div></td></tr>';loadCryptoChart([]);return;}tb.innerHTML=trades.map(t=>{const tot=parseFloat(t.amount)*parseFloat(t.price);const id=c2id[t.coin?.toUpperCase()];const cp=id&&mkt[id]?mkt[id].usd:parseFloat(t.price);const up=(cp-parseFloat(t.price))*parseFloat(t.amount);return`<tr><td class="mono" style="color:var(--text2)">${fD(t.date)}</td><td class="mono" style="font-weight:800;color:var(--accent)">${t.coin?.toUpperCase()}</td><td><span class="badge ${t.trade_type}">${t.trade_type?.toUpperCase()}</span></td><td class="mono">${t.amount}</td><td class="mono">$${fN(t.price)}</td><td class="mono">$${fN(tot)}</td><td style="font-size:11px;color:var(--text2)">${t.exchange||'—'}</td><td style="font-size:11px;max-width:100px;overflow:hidden;text-overflow:ellipsis">${t.note||'—'}</td><td class="mono" style="font-weight:700;color:${up>=0?'var(--green)':'var(--red)'}">${up>=0?'+':''}$${fN(up)}</td><td><button class="del" onclick="delCrypto('${t.id}')">🗑</button></td></tr>`;}).join('');loadCryptoChart(trades);
+  loadPortPie(trades);
+  loadAvgBuy();}
 function loadCryptoChart(trades){const sorted=[...(trades||[])].sort((a,b)=>new Date(a.date)-new Date(b.date));let run=0;const labels=[],data=[];sorted.forEach(t=>{const tot=parseFloat(t.amount)*parseFloat(t.price);if(t.trade_type==='buy')run+=tot;else run-=tot;labels.push(fD(t.date));data.push(run.toFixed(2));});if(chts.crypto)chts.crypto.destroy();const ctx=document.getElementById('cryptoChart')?.getContext('2d');if(!ctx)return;chts.crypto=new Chart(ctx,{type:'line',data:{labels,datasets:[{label:'Portfolio',data,borderColor:'#6366f1',backgroundColor:'rgba(99,102,241,.1)',fill:true,tension:.4,pointRadius:3,pointBackgroundColor:'#6366f1',borderWidth:2}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{ticks:{color:'#8b8db8',maxTicksLimit:6,font:{size:10}},grid:{color:'rgba(255,255,255,.04)'}},y:{ticks:{color:'#8b8db8',callback:v=>'$'+v,font:{size:10}},grid:{color:'rgba(255,255,255,.04)'}}}}});}
 function ctab(btn,p){document.querySelectorAll('.ct').forEach(b=>b.classList.remove('on'));btn.classList.add('on');}
 async function addCryptoTrade(){const cn=document.getElementById('cr-cn').value?.toUpperCase(),tp=document.getElementById('cr-tp').value,am=parseFloat(document.getElementById('cr-am').value),pr=parseFloat(document.getElementById('cr-pr').value),dt=document.getElementById('cr-dt').value,ex=document.getElementById('cr-ex').value,nt=document.getElementById('cr-nt').value;if(!cn||!am||!pr||!dt)return toast('Fill required fields','err');await db.from('crypto_trades').insert({user_id:U.id,coin:cn,trade_type:tp,amount:am,price:pr,date:dt,exchange:ex,note:nt});closeM('cryptoModal');toast('Trade added!','ok');loadCryptoPg();}
@@ -1202,6 +1302,268 @@ function fLarge(n){if(n>=1e12)return(n/1e12).toFixed(2)+'T';if(n>=1e9)return(n/1
 function cSym(c){return{USD:'$',EUR:'€',BDT:'৳'}[c]||c+' ';}
 
 // Fix syntax error in loadCryptoPg - the destructuring arrow fn
+
+
+// ═══ GOALS ═══
+async function loadGoals(){
+  const{data:goals}=await db.from('savings_goals').select('*').eq('user_id',U.id).order('created_at',{ascending:false});
+  const done=(goals||[]).filter(g=>parseFloat(g.current_amount)>=parseFloat(g.target_amount)).length;
+  document.getElementById('g-total').textContent=(goals||[]).length;
+  document.getElementById('g-done').textContent=done;
+  document.getElementById('g-prog').textContent=(goals||[]).length-done;
+  const list=document.getElementById('goalList');
+  if(!goals?.length){list.innerHTML='<div class="empty"><div class="empty-ic">🎯</div><div class="empty-tt">No goals yet</div><div class="empty-s">Set your first savings goal</div></div>';return;}
+  list.innerHTML=goals.map(g=>{
+    const cur=parseFloat(g.current_amount||0),tg=parseFloat(g.target_amount),pct=Math.min((cur/tg)*100,100);
+    const isDone=cur>=tg;const dl=g.deadline?new Date(g.deadline).toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric'}):'No deadline';
+    const daysLeft=g.deadline?Math.ceil((new Date(g.deadline)-new Date())/(1000*60*60*24)):null;
+    return`<div class="goal-card">
+      <div class="goal-header">
+        <div style="display:flex;align-items:center;gap:10px">
+          <span style="font-size:24px">${g.icon||'🎯'}</span>
+          <div>
+            <div class="goal-name">${g.name}</div>
+            <div style="font-size:11px;color:var(--text2)">${dl}${daysLeft!==null?` · ${daysLeft>0?daysLeft+' days left':'Overdue'}`:''}${isDone?' · <span style="color:var(--green)">✅ Completed!</span>':''}</div>
+          </div>
+        </div>
+        <div style="display:flex;align-items:center;gap:8px">
+          <span class="goal-pct">${pct.toFixed(0)}%</span>
+          <button class="del" onclick="delGoal('${g.id}')">🗑</button>
+        </div>
+      </div>
+      <div class="goal-bar"><div class="goal-fill ${isDone?'done':''}" style="width:${pct}%"></div></div>
+      <div class="goal-meta">
+        <span style="font-family:var(--mono)">$${fN(cur)} saved</span>
+        <span style="font-family:var(--mono)">$${fN(tg)} target</span>
+      </div>
+      <div style="display:flex;gap:8px;margin-top:10px">
+        <input type="number" placeholder="Add amount..." style="flex:1;padding:8px 12px;background:var(--surface);border:1px solid var(--border);border-radius:8px;color:var(--text);font-family:var(--mono);font-size:13px;outline:none" id="goal-add-${g.id}">
+        <button class="btn pri sm" onclick="addToGoal('${g.id}','${g.current_amount}','${g.target_amount}')">＋ Add</button>
+      </div>
+    </div>`;
+  }).join('');
+}
+async function saveGoal(){
+  const nm=document.getElementById('gl-nm').value,tg=parseFloat(document.getElementById('gl-tg').value),cu=parseFloat(document.getElementById('gl-cu').value)||0,dl=document.getElementById('gl-dl').value,ic=document.getElementById('gl-ic').value||'🎯';
+  if(!nm||!tg)return toast('Fill name and target','err');
+  await db.from('savings_goals').insert({user_id:U.id,name:nm,target_amount:tg,current_amount:cu,deadline:dl||null,icon:ic});
+  closeM('goalModal');toast('Goal created!','ok');
+  ['gl-nm','gl-tg','gl-cu','gl-dl','gl-ic'].forEach(id=>document.getElementById(id).value='');
+  loadGoals();
+}
+async function addToGoal(id,cur,tg){
+  const add=parseFloat(document.getElementById(`goal-add-${id}`)?.value)||0;
+  if(!add)return toast('Enter amount','err');
+  const newCur=parseFloat(cur)+add;
+  await db.from('savings_goals').update({current_amount:newCur}).eq('id',id);
+  toast(newCur>=parseFloat(tg)?'🎉 Goal completed!':'Added $'+fN(add),'ok');
+  loadGoals();
+}
+async function delGoal(id){if(!confirm('Delete goal?'))return;await db.from('savings_goals').delete().eq('id',id);loadGoals();}
+
+// ═══ SL/TP REMINDERS ═══
+let sltpReminders=[];
+async function loadSLTP(){
+  const{data}=await db.from('sltp_reminders').select('*').eq('user_id',U.id).order('created_at',{ascending:false});
+  sltpReminders=data||[];
+  renderSLTP();
+  loadAvgBuy();
+}
+function renderSLTP(){
+  const list=document.getElementById('sltpList');
+  if(!sltpReminders.length){list.innerHTML='<div class="empty"><div class="empty-ic">🔔</div><div class="empty-tt">No reminders</div></div>';return;}
+  list.innerHTML=sltpReminders.map(r=>{
+    const id=c2id[r.coin?.toUpperCase()];const curPrice=id&&mkt[id]?mkt[id].usd:null;
+    const tpPct=r.entry_price&&r.tp_price?(((r.tp_price-r.entry_price)/r.entry_price)*100).toFixed(1):null;
+    const slPct=r.entry_price&&r.sl_price?(((r.entry_price-r.sl_price)/r.entry_price)*100).toFixed(1):null;
+    return`<div class="sltp-item">
+      <div class="sltp-coin">${r.coin?.toUpperCase()}</div>
+      <div class="sltp-levels">
+        <div class="sltp-lv"><div class="lv-label">Entry</div><div class="lv-val" style="font-family:var(--mono)">$${fN(r.entry_price||0)}</div></div>
+        <div class="sltp-lv"><div class="lv-label">Current</div><div class="lv-val" style="font-family:var(--mono);color:var(--blue)">${curPrice?'$'+fN(curPrice):'—'}</div></div>
+        <div class="sltp-lv"><div class="lv-label">Take Profit ↑</div><div class="lv-val tp">$${fN(r.tp_price||0)}${tpPct?` (+${tpPct}%)`:''}
+</div></div>
+        <div class="sltp-lv"><div class="lv-label">Stop Loss ↓</div><div class="lv-val sl">$${fN(r.sl_price||0)}${slPct?` (-${slPct}%)`:''}
+</div></div>
+      </div>
+      ${r.note?`<div style="font-size:11px;color:var(--text2)">${r.note}</div>`:''}
+      <button class="del" onclick="delSLTP('${r.id}')">🗑</button>
+    </div>`;
+  }).join('');
+}
+async function saveSLTP(){
+  const cn=document.getElementById('st-cn').value?.toUpperCase(),en=parseFloat(document.getElementById('st-en').value),tp=parseFloat(document.getElementById('st-tp').value),sl=parseFloat(document.getElementById('st-sl').value),nt=document.getElementById('st-nt').value;
+  if(!cn||!en)return toast('Fill coin and entry price','err');
+  await db.from('sltp_reminders').insert({user_id:U.id,coin:cn,entry_price:en,tp_price:tp||null,sl_price:sl||null,note:nt});
+  closeM('sltpModal');toast('Reminder set!','ok');
+  ['st-cn','st-en','st-tp','st-sl','st-nt'].forEach(id=>document.getElementById(id).value='');
+  loadSLTP();
+}
+async function delSLTP(id){await db.from('sltp_reminders').delete().eq('id',id);toast('Removed','info');loadSLTP();}
+async function checkSLTP(){
+  await loadMkt();
+  let triggered=0;
+  for(const r of sltpReminders){
+    const id=c2id[r.coin?.toUpperCase()];
+    if(!id||!mkt[id])continue;
+    const cur=mkt[id].usd;
+    if(r.tp_price&&cur>=r.tp_price){toast(`🟢 ${r.coin} hit TP! $${fN(cur)} ≥ $${fN(r.tp_price)}`,'ok');triggered++;}
+    if(r.sl_price&&cur<=r.sl_price){toast(`🔴 ${r.coin} hit SL! $${fN(cur)} ≤ $${fN(r.sl_price)}`,'err');triggered++;}
+  }
+  if(!triggered)toast('No SL/TP triggered','info');
+  renderSLTP();
+}
+// Auto check every 30s
+setInterval(async()=>{if(sltpReminders.length&&U){await loadMkt();checkSLTPSilent();}},30000);
+async function checkSLTPSilent(){
+  for(const r of sltpReminders){
+    const id=c2id[r.coin?.toUpperCase()];if(!id||!mkt[id])continue;
+    const cur=mkt[id].usd;
+    if(r.tp_price&&cur>=r.tp_price)sendNotif(`${r.coin} hit Take Profit!`,`Current: $${fN(cur)}`);
+    if(r.sl_price&&cur<=r.sl_price)sendNotif(`${r.coin} hit Stop Loss!`,`Current: $${fN(cur)}`);
+  }
+}
+
+// ═══ AVG BUY PRICE ═══
+async function loadAvgBuy(){
+  const{data:trades}=await db.from('crypto_trades').select('*').eq('user_id',U.id);
+  if(!trades?.length){document.getElementById('avgBuyList').innerHTML='<div class="empty"><div class="empty-ic">📊</div><div class="empty-tt">No trades yet</div></div>';return;}
+  const holdings={};
+  trades.forEach(t=>{
+    const coin=t.coin?.toUpperCase();
+    if(!holdings[coin])holdings[coin]={totalCost:0,totalQty:0,trades:0};
+    if(t.trade_type==='buy'){holdings[coin].totalCost+=parseFloat(t.amount)*parseFloat(t.price);holdings[coin].totalQty+=parseFloat(t.amount);holdings[coin].trades++;}
+    else if(t.trade_type==='sell'){holdings[coin].totalQty=Math.max(0,holdings[coin].totalQty-parseFloat(t.amount));}
+  });
+  const list=document.getElementById('avgBuyList');
+  const entries=Object.entries(holdings).filter(([,v])=>v.totalQty>0);
+  if(!entries.length){list.innerHTML='<div class="empty"><div class="empty-tt">No open positions</div></div>';return;}
+  list.innerHTML=entries.map(([coin,h])=>{
+    const avg=h.totalQty>0?h.totalCost/h.totalQty:0;
+    const id=c2id[coin];const cur=id&&mkt[id]?mkt[id].usd:0;
+    const pnl=cur?((cur-avg)/avg*100).toFixed(2):null;
+    return`<div class="avg-card">
+      <div class="avg-item"><div class="avg-label">Coin</div><div class="avg-val" style="color:var(--accent)">${coin}</div></div>
+      <div class="avg-item"><div class="avg-label">Avg Buy</div><div class="avg-val">$${fN(avg)}</div></div>
+      <div class="avg-item"><div class="avg-label">Holding</div><div class="avg-val">${parseFloat(h.totalQty.toFixed(4))}</div></div>
+      <div class="avg-item"><div class="avg-label">Unreal. P&L</div><div class="avg-val ${pnl&&pnl>=0?'g':'r'}">${pnl?pnl+'%':'—'}</div></div>
+    </div>`;
+  }).join('');
+}
+
+// ═══ PORTFOLIO PIE CHART ═══
+async function loadPortPie(trades){
+  const holdings={};
+  (trades||[]).filter(t=>t.trade_type==='buy').forEach(t=>{
+    const coin=t.coin?.toUpperCase();
+    const val=parseFloat(t.amount)*parseFloat(t.price);
+    holdings[coin]=(holdings[coin]||0)+val;
+  });
+  const labels=Object.keys(holdings),vals=Object.values(holdings);
+  const total=vals.reduce((a,b)=>a+b,0);
+  if(chts.pie)chts.pie.destroy();
+  const ctx=document.getElementById('portPieChart')?.getContext('2d');
+  if(!ctx||!labels.length)return;
+  const clrs=['#6366f1','#06d6a0','#f72585','#fbbf24','#38bdf8','#a855f7','#ec4899','#14b8a6','#f97316','#84cc16'];
+  chts.pie=new Chart(ctx,{type:'doughnut',data:{labels,datasets:[{data:vals,backgroundColor:clrs,borderWidth:0,hoverOffset:8}]},options:{responsive:true,maintainAspectRatio:false,cutout:'65%',plugins:{legend:{display:false},tooltip:{callbacks:{label:d=>`${d.label}: $${fN(d.raw)} (${((d.raw/total)*100).toFixed(1)}%)`}}}}});
+  const leg=document.getElementById('portLegend');
+  if(leg)leg.innerHTML=labels.slice(0,6).map((l,i)=>`<div class="port-leg-item"><div class="port-leg-dot" style="background:${clrs[i]}"></div><div class="port-leg-name">${l}</div><div class="port-leg-pct">${((vals[i]/total)*100).toFixed(1)}%</div></div>`).join('');
+}
+
+// ═══ WEEKLY SPEND ═══
+async function loadWeeklySpend(){
+  const days=['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
+  const now=new Date();const dayOfWeek=now.getDay();
+  const monday=new Date(now);monday.setDate(now.getDate()-(dayOfWeek===0?6:dayOfWeek-1));
+  const{data:txs}=await db.from('transactions').select('amount,date,type').eq('user_id',U.id).eq('type','out').gte('date',monday.toISOString().split('T')[0]);
+  const byDay=new Array(7).fill(0);
+  (txs||[]).forEach(t=>{const d=new Date(t.date);const idx=(d.getDay()===0?6:d.getDay()-1);byDay[idx]+=parseFloat(t.amount||0);});
+  const max=Math.max(...byDay,1);
+  const todayIdx=dayOfWeek===0?6:dayOfWeek-1;
+  const container=document.getElementById('weekBars');
+  if(!container)return;
+  container.innerHTML=byDay.map((v,i)=>`
+    <div class="week-bar-wrap">
+      <div style="font-size:9px;color:var(--text2);font-family:var(--mono);font-weight:700;margin-bottom:2px">${v>0?'$'+fN(v):''}</div>
+      <div class="week-bar ${i===todayIdx?'today':''}" style="height:${Math.max((v/max)*60,4)}px"></div>
+      <div class="week-day">${days[i]}</div>
+    </div>`).join('');
+}
+
+// ═══ NET WORTH CHART ═══
+async function loadNetWorthChart(){
+  const{data:txs}=await db.from('transactions').select('amount,date,type').eq('user_id',U.id).order('date',{ascending:true});
+  if(!txs?.length)return;
+  let running=0;const labels=[],data=[];
+  const grouped={};
+  txs.forEach(t=>{const d=t.date;if(!grouped[d])grouped[d]=0;grouped[d]+=(t.type==='in'?1:-1)*parseFloat(t.amount);});
+  Object.entries(grouped).forEach(([d,v])=>{running+=v;labels.push(fD(d));data.push(running.toFixed(2));});
+  if(chts.nw)chts.nw.destroy();
+  const ctx=document.getElementById('nwChart')?.getContext('2d');
+  if(!ctx)return;
+  chts.nw=new Chart(ctx,{type:'line',data:{labels,datasets:[{data,borderColor:'#6366f1',backgroundColor:'rgba(99,102,241,.08)',fill:true,tension:.4,pointRadius:0,borderWidth:2}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{display:false},y:{ticks:{color:'#8b8db8',callback:v=>'$'+v,font:{size:9}},grid:{color:'rgba(255,255,255,.04)'}}}}});
+}
+
+// ═══ PUSH NOTIFICATIONS ═══
+async function requestNotifPerm(){
+  if(!('Notification' in window))return;
+  if(Notification.permission==='default')await Notification.requestPermission();
+}
+function sendNotif(title,body){
+  if(Notification.permission==='granted')new Notification(title,{body,icon:'logo.jpg'});
+  else toast(title+' '+body,'info');
+}
+
+// ═══ PULL TO REFRESH ═══
+let ptrStart=0,ptrActive=false;
+document.addEventListener('touchstart',e=>{if(window.scrollY===0)ptrStart=e.touches[0].clientY;});
+document.addEventListener('touchmove',e=>{
+  if(!ptrStart)return;const diff=e.touches[0].clientY-ptrStart;
+  if(diff>60&&window.scrollY===0&&!ptrActive){ptrActive=true;const ind=document.getElementById('ptrInd');if(ind)ind.classList.add('show');}
+});
+document.addEventListener('touchend',async()=>{
+  if(ptrActive){ptrActive=false;ptrStart=0;const ind=document.getElementById('ptrInd');if(ind)ind.classList.remove('show');await refreshMkt();loadDash();toast('Refreshed!','ok');}
+  ptrStart=0;
+});
+
+// ═══ SWIPE TO DELETE TRANSACTIONS ═══
+function addSwipeDelete(){
+  const rows=document.querySelectorAll('#txBody tr');
+  rows.forEach(row=>{
+    if(row.dataset.swipe)return;row.dataset.swipe='1';
+    let startX=0;
+    row.addEventListener('touchstart',e=>{startX=e.touches[0].clientX;},{ passive:true });
+    row.addEventListener('touchmove',e=>{const dx=e.touches[0].clientX-startX;if(dx<-50)row.style.transform=`translateX(${Math.max(dx,-80)}px)`;else row.style.transform='';},{ passive:true });
+    row.addEventListener('touchend',e=>{const dx=e.changedTouches[0].clientX-startX;if(dx<-60){row.style.background='rgba(247,37,133,.15)';row.style.transform='translateX(-80px)';setTimeout(()=>{const delBtn=row.querySelector('.del');if(delBtn)delBtn.click();},400);}else row.style.transform='';});
+  });
+}
+
+// ═══ OFFLINE MODE ═══
+window.addEventListener('online',()=>{document.getElementById('offlineBanner')?.classList.remove('show');toast('Back online!','ok');});
+window.addEventListener('offline',()=>{document.getElementById('offlineBanner')?.classList.add('show');toast('You are offline','info');});
+
+// ═══ SERVICE WORKER (cache) ═══
+if('serviceWorker' in navigator){
+  const swCode=`
+self.addEventListener('install',e=>e.waitUntil(caches.open('snledger-v402').then(c=>c.addAll(['./','./ index.html']))));
+self.addEventListener('fetch',e=>e.respondWith(caches.match(e.request).then(r=>r||fetch(e.request).catch(()=>caches.match('./')))));
+`;
+  const blob=new Blob([swCode],{type:'application/javascript'});
+  navigator.serviceWorker.register(URL.createObjectURL(blob)).catch(()=>{});
+}
+
+// ═══ UPDATE NAV for new pages ═══
+const _baseNav=nav;
+function nav(pg){
+  document.querySelectorAll('.pg').forEach(p=>p.classList.remove('on'));
+  document.querySelectorAll('.nv').forEach(n=>n.classList.remove('on'));
+  document.getElementById('pg-'+pg)?.classList.add('on');
+  const pgMap={dashboard:'dashboard',market:'market',news:'news',finance:'account',budget:'budget',crypto:'portfolio',watchlist:'watchlist',investment:'invest',tools:'trading',converter:'convert',calc:'calculator',notes:'note',profile:'profile',review:'rate',goals:'goal',sltp:'sl'};
+  document.querySelectorAll('.nv').forEach(n=>{const t=n.textContent.toLowerCase().trim();const key=pgMap[pg]||pg;if(t.includes(key))n.classList.add('on');});
+  if(pg==='market')loadMktPage();if(pg==='crypto')loadCryptoPg();if(pg==='investment')loadInvPg();if(pg==='watchlist')loadWL();if(pg==='budget')loadBudgets();if(pg==='tools')loadSigs();if(pg==='converter'){convCrypto();convCur();}if(pg==='notes')loadNotes();if(pg==='profile')loadProfile();if(pg==='review'){loadRvs();checkRvAlready();}if(pg==='news')loadNews();if(pg==='goals')loadGoals();if(pg==='sltp'){loadSLTP();checkSLTP();}
+  if(window.innerWidth<=768)toggleSB(false);
+}
+
 // ── AUTO LOGIN ──
 db.auth.getSession().then(({data:{session}})=>{if(session){U=session.user;setUI();showApp();}});
 setTimeout(checkAlerts,8000);
