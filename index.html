@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="theme-color" content="#0b0c14">
+<meta name="theme-color" content="#000000">
 <title>SN's Ledger</title>
 <link rel="icon" href="logo.jpg"><link rel="apple-touch-icon" href="logo.jpg">
 <link rel="manifest" href="data:application/json,{&quot;name&quot;:&quot;SN's Ledger&quot;,&quot;short_name&quot;:&quot;SNLedger&quot;,&quot;icons&quot;:[{&quot;src&quot;:&quot;logo.jpg&quot;,&quot;sizes&quot;:&quot;192x192&quot;,&quot;type&quot;:&quot;image/jpeg&quot;}],&quot;start_url&quot;:&quot;.&quot;,&quot;display&quot;:&quot;standalone&quot;,&quot;background_color&quot;:&quot;#0b0c14&quot;,&quot;theme_color&quot;:&quot;#7c6fef&quot;}">
@@ -474,7 +474,7 @@ tr:hover td{background:var(--surface2)}
 <div class="sidebar" id="sidebar">
   <div class="sb-head" onclick="nav('dashboard')" style="cursor:pointer">
     <img src="logo.jpg" alt="">
-    <div class="sb-head-text"><h2>SN's Ledger</h2><p>v4.0.3</p></div>
+    <div class="sb-head-text"><h2>SN's Ledger</h2><p>v4.0.4</p></div>
   </div>
   <div class="sb-user" onclick="nav('profile')">
     <div class="sb-av" id="sbAv">S</div>
@@ -1015,9 +1015,7 @@ tr:hover td{background:var(--surface2)}
   <div class="mf"><button class="btn" onclick="closeM('sltpModal')">Cancel</button><button class="btn pri" onclick="saveSLTP()">Set Reminder</button></div>
 </div></div>
 
-<div class="toast-w" id="toastW"></div>
-<div class="offline-banner" id="offlineBanner">📡 You are offline — cached data shown</div>
-<div class="ptr-indicator" id="ptrInd" style="display:none">↓ Release to refresh</div>
+<div class="toast-w" id="toastW"></div><div id="ptrInd" style="display:none"></div>
 
 <script>
 const SBU='https://posemzalaztjiovzpija.supabase.co';
@@ -1035,6 +1033,10 @@ function setUI(){const n=U?.user_metadata?.full_name||U?.email?.split('@')[0]||'
 function showApp(){document.getElementById('authPage').style.display='none';document.getElementById('app').classList.add('on');document.getElementById('fabBtn').style.display='flex';initApp();}
 
 // ── INIT ──
+// Simple in-memory cache
+const cache={mkt:null,mktTime:0};
+const CACHE_TTL=30000; // 30s
+
 async function initApp(){
   requestNotifPerm();const td=new Date().toISOString().split('T')[0];['tx-dt','cr-dt','iv-dt'].forEach(id=>{const el=document.getElementById(id);if(el)el.value=td;});await loadMkt();loadDash();loadAccounts();loadNews();}
 
@@ -1056,10 +1058,20 @@ document.addEventListener('click',e=>{if(!e.target.closest('#fabBtn')&&!e.target
 
 // ── MARKET ──
 const CIDS='bitcoin,ethereum,binancecoin,solana,ripple,dogecoin,cardano,avalanche-2,chainlink,polkadot,shiba-inu,pepe';
-async function loadMkt(){try{const r=await fetch(`https://api.coingecko.com/api/v3/simple/price?ids=${CIDS}&vs_currencies=usd&include_24hr_change=true&include_market_cap=true&include_24hr_vol=true`);if(!r.ok)return;mkt=await r.json();updateTicker();}catch(e){console.log(e);}}
+async function loadMkt(force=false){
+  const now=Date.now();
+  if(!force&&cache.mkt&&(now-cache.mktTime)<CACHE_TTL){mkt=cache.mkt;updateTicker();return;}
+  try{
+    const r=await fetch(`https://api.coingecko.com/api/v3/simple/price?ids=${CIDS}&vs_currencies=usd&include_24hr_change=true&include_market_cap=true&include_24hr_vol=true`);
+    if(!r.ok)return;
+    mkt=await r.json();
+    cache.mkt=mkt;cache.mktTime=now;
+    updateTicker();
+  }catch(e){if(cache.mkt){mkt=cache.mkt;updateTicker();}console.log(e);}
+}
 function updateTicker(){const map={bitcoin:'BTC',ethereum:'ETH',binancecoin:'BNB',solana:'SOL',ripple:'XRP',dogecoin:'DOGE',cardano:'ADA','avalanche-2':'AVAX'};let h='';for(const[id,sym]of Object.entries(map)){if(!mkt[id])continue;const p=mkt[id],c=(p.usd_24h_change||0).toFixed(2),up=c>=0;h+=`<span class="ti"><span class="ti-sym">${sym}</span><span class="ti-p">$${fN(p.usd)}</span><span class="ti-c ${up?'up':'dn'}">${up?'▲':'▼'}${Math.abs(c)}%</span></span>`;}const t=document.getElementById('tickIn');if(t)t.innerHTML=h+h;}
 async function loadMktPage(){await loadMkt();const coins=[{id:'bitcoin',sym:'BTC',name:'Bitcoin'},{id:'ethereum',sym:'ETH',name:'Ethereum'},{id:'binancecoin',sym:'BNB',name:'BNB'},{id:'solana',sym:'SOL',name:'Solana'},{id:'ripple',sym:'XRP',name:'XRP'},{id:'dogecoin',sym:'DOGE',name:'Dogecoin'},{id:'cardano',sym:'ADA',name:'Cardano'},{id:'avalanche-2',sym:'AVAX',name:'Avalanche'},{id:'chainlink',sym:'LINK',name:'Chainlink'},{id:'polkadot',sym:'DOT',name:'Polkadot'},{id:'shiba-inu',sym:'SHIB',name:'Shiba Inu'},{id:'pepe',sym:'PEPE',name:'Pepe'}];const g=document.getElementById('cryptoMg');g.innerHTML=coins.map(c=>{const p=mkt[c.id];if(!p)return'';const ch=(p.usd_24h_change||0).toFixed(2),up=ch>=0;const tv=c.sym==='BNB'?'BINANCE:BNBUSDT':`BINANCE:${c.sym}USDT`;return`<div class="mc" onclick="openCoinM('${c.sym}','${c.name}','${tv}','${c.id}')"><div class="mc-sym">${c.sym}</div><div class="mc-name">${c.name}</div><div class="mc-price">$${fN(p.usd)}</div><div class="mc-ch ${up?'up':'dn'}">${up?'▲':'▼'} ${Math.abs(ch)}%</div></div>`;}).join('');const stocks=[{sym:'AAPL',name:'Apple',tv:'NASDAQ:AAPL'},{sym:'TSLA',name:'Tesla',tv:'NASDAQ:TSLA'},{sym:'NVDA',name:'NVIDIA',tv:'NASDAQ:NVDA'},{sym:'MSFT',name:'Microsoft',tv:'NASDAQ:MSFT'},{sym:'GOOGL',name:'Google',tv:'NASDAQ:GOOGL'},{sym:'SPY',name:'S&P 500 ETF',tv:'AMEX:SPY'},{sym:'GOLD',name:'Gold',tv:'TVC:GOLD'}];document.getElementById('stockMg').innerHTML=stocks.map(s=>`<div class="mc" onclick="openCoinM('${s.sym}','${s.name}','${s.tv}',null)"><div class="mc-sym">${s.sym}</div><div class="mc-name">${s.name}</div><div class="mc-price" style="font-size:13px;color:var(--text2)">Click for chart</div><div class="mc-ch up">TradingView ↗</div></div>`).join('');}
-async function refreshMkt(){await loadMkt();updateTicker();toast('Prices updated!','ok');}
+async function refreshMkt(){await loadMkt(true);updateTicker();toast('Prices updated! 🔄','ok');}
 
 // ── NEWS ──
 async function loadNews(){
@@ -1189,8 +1201,24 @@ function loadDashCharts(txs){const cm={};txs.filter(t=>t.type==='out').forEach(t
 
 // ── ACCOUNTS ──
 const grads=['linear-gradient(90deg,#6366f1,#a855f7)','linear-gradient(90deg,#06d6a0,#0891b2)','linear-gradient(90deg,#fbbf24,#f97316)','linear-gradient(90deg,#f72585,#dc2626)','linear-gradient(90deg,#38bdf8,#0ea5e9)'];
-async function loadAccounts(){const{data:a}=await db.from('accounts').select('*').eq('user_id',U.id).order('created_at');const g=document.getElementById('accGrid');if(!a?.length){g.innerHTML='<div class="empty" style="grid-column:1/-1"><div class="empty-ic">💰</div><div class="empty-tt">No accounts</div><div class="empty-s">Create your first account</div></div>';return;}g.innerHTML=a.map((ac,i)=>{const b=parseFloat(ac.balance||0);return`<div class="ac" style="--grad:${grads[i%5]}" onclick="selAcc('${ac.id}','${ac.name}','${ac.currency}',this)"><div class="ac-name">${ac.name}</div><div class="ac-cur">${ac.currency}</div><div class="ac-bal ${b>=0?'pos':'neg'}">${cSym(ac.currency)}${fN(Math.abs(b))}</div><button style="margin-top:10px;background:rgba(247,37,133,.08);border:1px solid rgba(247,37,133,.2);color:var(--red);padding:4px 10px;border-radius:6px;font-size:11px;cursor:pointer;width:100%" onclick="event.stopPropagation();delAcc('${ac.id}')">🗑 Delete</button></div>`;}).join('');}
-async function createAcc(){const n=document.getElementById('a-nm').value,c=document.getElementById('a-cu').value,b=parseFloat(document.getElementById('a-ba').value)||0;if(!n)return toast('Enter name','err');await db.from('accounts').insert({user_id:U.id,name:n,currency:c,balance:b});closeM('accModal');toast('Account created!','ok');loadAccounts();document.getElementById('a-nm').value='';document.getElementById('a-ba').value='';}
+async function loadAccounts(){
+  const g=document.getElementById('accGrid');
+  g.innerHTML='<div class="loading"><div class="spin"></div></div>';
+  const{data:a,error}=await db.from('accounts').select('*').eq('user_id',U.id).order('created_at');
+  if(error){console.error('loadAccounts error:',error);g.innerHTML=`<div class="empty" style="grid-column:1/-1"><div class="empty-ic">⚠️</div><div class="empty-tt">Load failed</div><div class="empty-s">${error.message}</div></div>`;return;}if(!a?.length){g.innerHTML='<div class="empty" style="grid-column:1/-1"><div class="empty-ic" style="font-size:56px">💰</div><div class="empty-tt">No accounts yet</div><div class="empty-s">Tap + New Account to get started</div></div>';return;}g.innerHTML=a.map((ac,i)=>{const b=parseFloat(ac.balance||0);return`<div class="ac" style="--grad:${grads[i%5]}" onclick="selAcc('${ac.id}','${ac.name}','${ac.currency}',this)"><div class="ac-name">${ac.name}</div><div class="ac-cur">${ac.currency}</div><div class="ac-bal ${b>=0?'pos':'neg'}">${cSym(ac.currency)}${fN(Math.abs(b))}</div><button style="margin-top:10px;background:rgba(247,37,133,.08);border:1px solid rgba(247,37,133,.2);color:var(--red);padding:4px 10px;border-radius:6px;font-size:11px;cursor:pointer;width:100%" onclick="event.stopPropagation();delAcc('${ac.id}')">🗑 Delete</button></div>`;}).join('');}
+async function createAcc(){
+  const n=document.getElementById('a-nm').value,cu=document.getElementById('a-cu').value,b=parseFloat(document.getElementById('a-ba').value)||0;
+  if(!n)return toast('Enter name','err');
+  const{error}=await db.from('accounts').insert({user_id:U.id,name:n,currency:cu,balance:b});
+  if(error){console.error(error);return toast('Error: '+error.message,'err');}
+  closeM('accModal');
+  toast('Account created! ✅','ok');
+  document.getElementById('a-nm').value='';
+  document.getElementById('a-ba').value='';
+  // Force reload accounts with slight delay
+  setTimeout(()=>loadAccounts(),300);
+  loadDash();
+}
 async function delAcc(id){if(!confirm('Delete account and all its transactions?'))return;await db.from('transactions').delete().eq('account_id',id);await db.from('accounts').delete().eq('id',id);toast('Deleted','info');loadAccounts();document.getElementById('accTxSec').style.display='none';curAcc=null;}
 function selAcc(id,name,cur,el){curAcc={id,name,cur};document.getElementById('accTxTt').textContent=name+' — Transactions';document.getElementById('accTxSec').style.display='block';document.querySelectorAll('.ac').forEach(c=>c.classList.remove('sel'));el.classList.add('sel');loadTxs();setTimeout(()=>document.getElementById('accTxSec').scrollIntoView({behavior:'smooth'}),100);}
 
@@ -1550,8 +1578,8 @@ function addSwipeDelete(){
 }
 
 // ═══ OFFLINE MODE ═══
-window.addEventListener('online',()=>{document.getElementById('offlineBanner')?.classList.remove('show');toast('Back online!','ok');});
-window.addEventListener('offline',()=>{document.getElementById('offlineBanner')?.classList.add('show');toast('You are offline','info');});
+window.addEventListener('online',()=>{toast('Back online! 🌐','ok');});
+window.addEventListener('offline',()=>{toast('You are offline 📡','info');});
 
 // ═══ SERVICE WORKER (cache) ═══
 if('serviceWorker' in navigator){
@@ -1576,7 +1604,17 @@ function nav(pg){
 }
 
 // ── AUTO LOGIN ──
-db.auth.getSession().then(({data:{session}})=>{if(session){U=session.user;setUI();showApp();}});
+db.auth.getSession().then(({data:{session}})=>{
+  if(session){
+    U=session.user;
+    setUI();
+    showApp();
+    // Debug: verify DB connection
+    db.from('accounts').select('count').eq('user_id',session.user.id).then(({error})=>{
+      if(error)console.warn('DB connection issue:',error.message);
+    });
+  }
+});
 setTimeout(checkAlerts,8000);
 </script>
 </body>
